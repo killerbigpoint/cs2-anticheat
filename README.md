@@ -3,11 +3,11 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. Currently in 
 
 ## Features / Roadmap
 - [x] Basic aimbot detection (Only rage)
-- [] Backtrack
-- [] EyePosition Manipulation
-- [] Rapid-Fire
-- [] Bunnyhop
-- [] Anti-Wallhack?
+- [ ] Backtrack
+- [ ] EyePosition Manipulation
+- [ ] Rapid-Fire
+- [ ] Bunnyhop
+- [ ] Anti-Wallhack?
 
 ## Installation
 - TODO

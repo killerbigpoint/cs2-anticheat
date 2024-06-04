@@ -21,6 +21,6 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 | !tbac_enable     | <1 / 0>                           | Show the spawns for the specified bombsite.                         | @css/admin  |
 
 ## Credits
-[Original Creators Of SMAC](https://forums.alliedmods.net/forumdisplay.php?f=133)<br />
-[Fork Maintainer Of SMAC](https://github.com/Silenci0/SMAC)<br />
-[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)<br />
+[Original Creators Of SMAC](https://forums.alliedmods.net/forumdisplay.php?f=133) - AlliedModders<br />
+[Fork Maintainer Of SMAC](https://github.com/Silenci0/SMAC) - Silenci0<br />
+[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)- Michael Wilson<br />

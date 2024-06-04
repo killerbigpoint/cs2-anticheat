@@ -23,4 +23,4 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 ## Credits
 [Original Creators Of SMAC](https://forums.alliedmods.net/forumdisplay.php?f=133) - AlliedModders<br />
 [Fork Maintainer Of SMAC](https://github.com/Silenci0/SMAC) - Silenci0<br />
-[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)- Michael Wilson<br />
+[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) - Michael Wilson<br />

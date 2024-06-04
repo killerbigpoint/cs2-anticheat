@@ -127,4 +127,139 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Dependencies\CounterStrikeSharp.API.deps.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\CounterStrikeSharp.API.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\CounterStrikeSharp.API.pdb">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\CounterStrikeSharp.API.runtimeconfig.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\CounterStrikeSharp.API.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\McMaster.NETCore.Plugins.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.DotNet.PlatformAbstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.Binder.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.CommandLine.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.EnvironmentVariables.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.FileExtensions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.Json.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Configuration.UserSecrets.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.DependencyInjection.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.DependencyInjection.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.DependencyModel.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Diagnostics.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Diagnostics.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.FileProviders.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.FileProviders.Physical.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.FileSystemGlobbing.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Hosting.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Hosting.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Localization.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.Abstractions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.Configuration.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.Console.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.Debug.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.EventLog.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Logging.EventSource.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Options.ConfigurationExtensions.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Options.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Microsoft.Extensions.Primitives.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\runtimes\win\lib\net8.0\System.Diagnostics.EventLog.Messages.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Scrutor.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Serilog.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Serilog.Extensions.Logging.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Serilog.Sinks.Console.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\Serilog.Sinks.File.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Dependencies\System.Diagnostics.EventLog.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

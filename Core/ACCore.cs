@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CounterStrikeSharp.API.Core.Attributes;
 using CounterStrikeSharp.API.Core;
+using Microsoft.Extensions.Logging;
 using TBAntiCheat.Handlers;
 
 namespace TBAntiCheat.Core
 {
+    [MinimumApiVersion(234)]
     public class ACCore : BasePlugin
     {
         public override string ModuleName => "TB Anti-Cheat";

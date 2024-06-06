@@ -49,6 +49,21 @@ namespace TBAntiCheat.Detections
             }
         }
 
+        internal static void OnPlayerTick(PlayerData player)
+        {
+            foreach (BaseDetection detection in Globals.Detections)
+            {
+                try
+                {
+                    detection.OnPlayerTick(player);
+                }
+                catch (Exception e)
+                {
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnPlayerTick) -> {e.Message}");
+                }
+            }
+        }
+
         internal static void OnRoundStart()
         {
             foreach (BaseDetection detection in Globals.Detections)

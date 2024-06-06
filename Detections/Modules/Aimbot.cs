@@ -175,6 +175,20 @@ namespace TBAntiCheat.Detections.Modules
             }
         }
 
+        internal override void OnPlayerTick(PlayerData player)
+        {
+            PlayerAimbotData aimbotData = eyeAngleHistory[player.Index];
+
+            AngleSnapshot snapshot = new AngleSnapshot(player.Pawn.EyeAngles);
+            aimbotData.eyeAngleHistory[aimbotData.historyIndex] = snapshot;
+
+            aimbotData.historyIndex++;
+            if (aimbotData.historyIndex == aimbotMaxHistory)
+            {
+                aimbotData.historyIndex = 0;
+            }
+        }
+
         internal override void OnRoundStart()
         {
             foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
@@ -183,24 +197,6 @@ namespace TBAntiCheat.Detections.Modules
                 PlayerAimbotData aimbotData = eyeAngleHistory[data.Index];
 
                 aimbotData.Reset();
-            }
-        }
-
-        internal override void OnGameTick()
-        {
-            foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
-            {
-                PlayerData playerData = player.Value;
-                PlayerAimbotData aimbotData = eyeAngleHistory[playerData.Index];
-
-                AngleSnapshot snapshot = new AngleSnapshot(playerData.Pawn.EyeAngles);
-                aimbotData.eyeAngleHistory[aimbotData.historyIndex] = snapshot;
-
-                aimbotData.historyIndex++;
-                if (aimbotData.historyIndex == aimbotMaxHistory)
-                {
-                    aimbotData.historyIndex = 0;
-                }
             }
         }
 

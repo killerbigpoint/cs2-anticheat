@@ -20,6 +20,11 @@ namespace TBAntiCheat.Handlers
         private static void OnGameTick()
         {
             BaseCaller.OnGameTick();
+
+            foreach(KeyValuePair<uint, PlayerData> player in Globals.Players)
+            {
+                BaseCaller.OnPlayerTick(player.Value);
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ namespace TBAntiCheat.Detections
         internal virtual void OnPlayerJoin(PlayerData player) { }
         internal virtual void OnPlayerLeave(PlayerData player) { }
         internal virtual void OnPlayerDead(PlayerData victim, PlayerData shooter) { }
+        internal virtual void OnPlayerTick(PlayerData player) { }
 
         internal virtual void OnRoundStart() { }
         internal virtual void OnRoundEnd() { }

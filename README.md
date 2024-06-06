@@ -11,7 +11,7 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 
 ## Installation
 - Download the latest release from [Releases](https://github.com/killerbigpoint/cs2-anticheat/releases)
-- Drag and drop the folder *TBAntiCheat* into your plugins folder which should be in inside of `game/csgo/addons/counterstrikesharp/plugins`
+- Drag and drop the folder **TBAntiCheat** into your plugins folder which should be in inside of `game/csgo/addons/counterstrikesharp/plugins`
 
 ## Configuration
 - TODO

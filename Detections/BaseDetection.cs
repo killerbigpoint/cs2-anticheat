@@ -2,7 +2,7 @@
 
 namespace TBAntiCheat.Detections
 {
-    internal enum ActionType : byte
+    public enum ActionType : byte
     {
         None = 0,
         Log = 1,

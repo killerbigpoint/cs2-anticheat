@@ -4,6 +4,15 @@ using TBAntiCheat.Core;
 
 namespace TBAntiCheat.Detections.Modules
 {
+    public class AimbotSaveData
+    {
+        public bool DetectionEnabled { get; set; } = true;
+        public ActionType DetectionAction { get; set; } = ActionType.Kick;
+
+        public float MaxAimbotAngle { get; set; } = 30f;
+        public int MaxDetectionsBeforeAction { get; set; } = 2;
+    }
+
     internal struct AngleSnapshot
     {
         internal float x;
@@ -85,21 +94,19 @@ namespace TBAntiCheat.Detections.Modules
 
     internal class Aimbot : BaseDetection
     {
-        private const float aimbotMinimumDistance = 32f; //Must be 32 units away from the player before we check for aimbot
-        private const float aimbotMaxAngle = 30f; //Above 30 degrees in a single tick isn't legit
-        private const int aimbotMaxHistory = 64; //1 entire second worth of history
-        private const int aimbotMaxDetections = 2; //On 2nd detection we ban
+        private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)
 
-        internal PlayerAimbotData[] eyeAngleHistory;
+        private readonly BaseConfig<AimbotSaveData> config;
+        private readonly PlayerAimbotData[] eyeAngleHistory;
 
         internal Aimbot() : base()
         {
+            config = new BaseConfig<AimbotSaveData>("AimbotConfig");
             eyeAngleHistory = new PlayerAimbotData[Server.MaxPlayers];
         }
 
         internal override string Name => "Aimbot";
-        internal override ActionType ActionType => actionType;
-        private ActionType actionType = ActionType.Log;
+        internal override ActionType ActionType => config.Config.DetectionAction;
 
         internal override void OnPlayerJoin(PlayerData player)
         {
@@ -125,19 +132,12 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            AngleSnapshot victimPos = new AngleSnapshot(victim.Pawn.AbsOrigin);
-            AngleSnapshot shooterPos = new AngleSnapshot(shooter.Pawn.AbsOrigin);
-
-            float distance = AngleSnapshot.Distance(victimPos, shooterPos);
-            if (distance < aimbotMinimumDistance)
-            {
-                return;
-            }
-
             PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
 
             int historyIndex = aimbotData.historyIndex;
             AngleSnapshot lastAngle = aimbotData.eyeAngleHistory[historyIndex];
+
+            float maxAngle = config.Config.MaxAimbotAngle;
 
             for (int i = 1; i < aimbotMaxHistory; i++)
             {
@@ -155,7 +155,7 @@ namespace TBAntiCheat.Detections.Modules
                     angleDiff = MathF.Abs(angleDiff - 360);
                 }
 
-                if (angleDiff > aimbotMaxAngle)
+                if (angleDiff > maxAngle)
                 {
                     OnAimbotDetected(shooter, aimbotData, angleDiff);
                     break;
@@ -197,10 +197,12 @@ namespace TBAntiCheat.Detections.Modules
 
         private void OnAimbotDetected(PlayerData player, PlayerAimbotData data, float angleDiff)
         {
-            data.detections++;
-            ACCore.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{aimbotMaxDetections} detections)");
+            int maxDetections = config.Config.MaxDetectionsBeforeAction;
 
-            if (data.detections < aimbotMaxDetections)
+            data.detections++;
+            ACCore.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections)");
+
+            if (data.detections < maxDetections)
             {
                 return;
             }

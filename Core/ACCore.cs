@@ -13,10 +13,12 @@ namespace TBAntiCheat.Core
         public override string ModuleAuthor => "Killer_bigpoint";
         public override string ModuleDescription => "Proper Anti-Cheat for CS2";
 
+        private static ACCore core;
         private static ILogger? logger = null;
 
         public override void Load(bool hotReload)
         {
+            core = this;
             logger = Logger;
 
             Commands.InitializeCommands(this);
@@ -34,6 +36,11 @@ namespace TBAntiCheat.Core
             }
 
             logger.Log(LogLevel.Information, message);
+        }
+
+        internal static ACCore GetCore()
+        {
+            return core;
         }
     }
 }

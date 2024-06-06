@@ -1,26 +1,31 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Admin;
-using TBAntiCheat.Core;
 
 namespace TBAntiCheat.Handlers
 {
-    internal class Commands
+    internal static class CommandHandler
     {
-        internal static void InitializeCommands(BasePlugin plugin)
+        private static BasePlugin plugin;
+
+        internal static void InitializeCommandHandler(BasePlugin basePlugin)
         {
-            plugin.AddCommand("tbac_enable", "Activates/Deactivates the anticheat", OnEnableCommand);
+            plugin = basePlugin;
         }
 
-        [RequiresPermissions("@css/admin")]
-        private static void OnEnableCommand(CCSPlayerController? player, CommandInfo command)
+        internal static bool RegisterCommand(string command, string description, CommandInfo.CommandCallback handler)
         {
-            ACCore.Log($"[TBAC] {command.ArgCount}");
-
-            for (int i = 0; i < command.ArgCount; i++)
+            if (string.IsNullOrEmpty(command) == true)
             {
-                ACCore.Log($"[TBAC] {command.ArgByIndex(i)}");
+                return false;
             }
+
+            if (handler == null)
+            {
+                return false;
+            }
+
+            plugin.AddCommand(command, description, handler);
+            return true;
         }
     }
 }

@@ -1,6 +1,10 @@
 ﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Admin;
+using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 using TBAntiCheat.Core;
+using TBAntiCheat.Handlers;
 
 namespace TBAntiCheat.Detections.Modules
 {
@@ -103,6 +107,11 @@ namespace TBAntiCheat.Detections.Modules
         {
             config = new BaseConfig<AimbotSaveData>("AimbotConfig");
             eyeAngleHistory = new PlayerAimbotData[Server.MaxPlayers];
+
+            CommandHandler.RegisterCommand("tbac_aimbot_enable", "Activates/Deactivates the aimbot detection", OnEnableCommand);
+            CommandHandler.RegisterCommand("tbac_aimbot_action", "Activates/Deactivates the aimbot detection", OnActionCommand);
+            CommandHandler.RegisterCommand("tbac_aimbot_angle", "Activates/Deactivates the aimbot detection", OnAngleCommand);
+            CommandHandler.RegisterCommand("tbac_aimbot_detections", "Activates/Deactivates the aimbot detection", OnDetectionsCommand);
         }
 
         internal override string Name => "Aimbot";
@@ -208,6 +217,80 @@ namespace TBAntiCheat.Detections.Modules
             }
 
             OnPlayerDetected(player);
+        }
+
+        // ----- Commands ----- \\
+
+        [RequiresPermissions("@css/admin")]
+        private void OnEnableCommand(CCSPlayerController? player, CommandInfo command)
+        {
+            if (command.ArgCount != 2)
+            {
+                return;
+            }
+
+            string arg = command.ArgByIndex(1);
+            if (bool.TryParse(arg, out bool state) == false)
+            {
+                return;
+            }
+
+            config.Config.DetectionEnabled = state;
+            config.Save();
+        }
+
+        [RequiresPermissions("@css/admin")]
+        private void OnActionCommand(CCSPlayerController? player, CommandInfo command)
+        {
+            if (command.ArgCount != 2)
+            {
+                return;
+            }
+
+            string arg = command.ArgByIndex(1);
+            if (int.TryParse(arg, out int action) == false)
+            {
+                return;
+            }
+
+            config.Config.DetectionAction = (ActionType)action;
+            config.Save();
+        }
+
+        [RequiresPermissions("@css/admin")]
+        private void OnAngleCommand(CCSPlayerController? player, CommandInfo command)
+        {
+            if (command.ArgCount != 2)
+            {
+                return;
+            }
+
+            string arg = command.ArgByIndex(1);
+            if (float.TryParse(arg, out float angle) == false)
+            {
+                return;
+            }
+
+            config.Config.MaxAimbotAngle = angle;
+            config.Save();
+        }
+
+        [RequiresPermissions("@css/admin")]
+        private void OnDetectionsCommand(CCSPlayerController? player, CommandInfo command)
+        {
+            if (command.ArgCount != 2)
+            {
+                return;
+            }
+
+            string arg = command.ArgByIndex(1);
+            if (int.TryParse(arg, out int detections) == false)
+            {
+                return;
+            }
+
+            config.Config.MaxDetectionsBeforeAction = detections;
+            config.Save();
         }
     }
 }

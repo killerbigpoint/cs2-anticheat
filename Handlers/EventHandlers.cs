@@ -4,7 +4,7 @@ using TBAntiCheat.Detections;
 
 namespace TBAntiCheat.Handlers
 {
-    internal class EventHandlers
+    internal static class EventHandlers
     {
         internal static void InitializeHandlers(BasePlugin plugin)
         {

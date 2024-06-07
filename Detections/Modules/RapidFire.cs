@@ -27,7 +27,7 @@ namespace TBAntiCheat.Detections.Modules
             config = new BaseConfig<RapidFireSaveData>("RapidFire");
             playerLastWeapon = new Dictionary<int, uint>(Server.MaxPlayers);
 
-            CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates EyeAngle detections", OnEnableCommand);
+            CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates RapidFire detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_rapidfire_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
         }
 

@@ -33,11 +33,11 @@ namespace TBAntiCheat.Core
                 new Aimbot(),
                 new Backtrack(),
                 new EyePosition(),
-                new EyeAngles()
+                new EyeAngles(),
+                new RapidFire()
             ];
 
             InitializedOnce = true;
-            ACCore.Log("[TBAC] Initialized Globals");
         }
     }
 }

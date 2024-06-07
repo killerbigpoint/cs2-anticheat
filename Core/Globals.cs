@@ -32,7 +32,8 @@ namespace TBAntiCheat.Core
             [
                 new Aimbot(),
                 new Backtrack(),
-                new EyePosition()
+                new EyePosition(),
+                new EyeAngles()
             ];
 
             InitializedOnce = true;

@@ -109,9 +109,9 @@ namespace TBAntiCheat.Detections.Modules
             eyeAngleHistory = new PlayerAimbotData[Server.MaxPlayers];
 
             CommandHandler.RegisterCommand("tbac_aimbot_enable", "Activates/Deactivates the aimbot detection", OnEnableCommand);
-            CommandHandler.RegisterCommand("tbac_aimbot_action", "Activates/Deactivates the aimbot detection", OnActionCommand);
-            CommandHandler.RegisterCommand("tbac_aimbot_angle", "Activates/Deactivates the aimbot detection", OnAngleCommand);
-            CommandHandler.RegisterCommand("tbac_aimbot_detections", "Activates/Deactivates the aimbot detection", OnDetectionsCommand);
+            CommandHandler.RegisterCommand("tbac_aimbot_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
+            CommandHandler.RegisterCommand("tbac_aimbot_angle", "Max angle in a single tick before detection", OnAngleCommand);
+            CommandHandler.RegisterCommand("tbac_aimbot_detections", "Maximum detections before an action should be taken", OnDetectionsCommand);
         }
 
         internal override string Name => "Aimbot";
@@ -212,7 +212,8 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            OnPlayerDetected(player);
+            string reason = $"Aimbot -> {angleDiff}";
+            OnPlayerDetected(player, reason);
         }
 
         // ----- Commands ----- \\
@@ -249,7 +250,13 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            config.Config.DetectionAction = (ActionType)action;
+            ActionType actionType = (ActionType)action;
+            if (config.Config.DetectionAction.HasFlag(actionType) == false)
+            {
+                return;
+            }
+
+            config.Config.DetectionAction = actionType;
             config.Save();
         }
 

@@ -17,13 +17,14 @@ namespace TBAntiCheat.Detections
         internal abstract string Name { get; }
         internal abstract ActionType ActionType { get; }
 
-        protected void OnPlayerDetected(PlayerData player)
+        protected void OnPlayerDetected(PlayerData player, string reason)
         {
             DetectionMetadata metadata = new DetectionMetadata()
             {
                 detection = this,
                 player = player,
-                time = DateTime.Now
+                time = DateTime.Now,
+                reason = reason
             };
 
             DetectedSystem.OnPlayerDetected(metadata);
@@ -32,6 +33,7 @@ namespace TBAntiCheat.Detections
         internal virtual void OnPlayerJoin(PlayerData player) { }
         internal virtual void OnPlayerLeave(PlayerData player) { }
         internal virtual void OnPlayerDead(PlayerData victim, PlayerData shooter) { }
+        internal virtual void OnPlayerShoot(PlayerData player) { }
         internal virtual void OnPlayerTick(PlayerData player) { }
 
         internal virtual void OnRoundStart() { }

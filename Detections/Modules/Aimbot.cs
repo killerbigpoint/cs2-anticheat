@@ -136,6 +136,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
+            if (config.Config.DetectionEnabled == false)
+            {
+                return;
+            }
+
             if (victim.Pawn.AbsOrigin == null || shooter.Pawn.AbsOrigin == null)
             {
                 return;
@@ -177,6 +182,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerTick(PlayerData player)
         {
+            if (config.Config.DetectionEnabled == false)
+            {
+                return;
+            }
+
             PlayerAimbotData aimbotData = eyeAngleHistory[player.Index];
 
             AngleSnapshot snapshot = new AngleSnapshot(player.Pawn.EyeAngles);

@@ -16,5 +16,10 @@ namespace TBAntiCheat.Utils
 
             //TODO: Save this mf and remember for next time
         }
+
+        internal static void NotifyAdmins()
+        {
+
+        }
     }
 }

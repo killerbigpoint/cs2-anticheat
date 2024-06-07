@@ -8,6 +8,7 @@ namespace TBAntiCheat.Core
         internal BaseDetection detection;
         internal PlayerData player;
         internal DateTime time;
+        internal string reason;
     }
 
     internal class DetectedSystem
@@ -20,13 +21,13 @@ namespace TBAntiCheat.Core
 
                 case ActionType.Log:
                 {
-                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} is suspected of using {metadata.detection.Name}");
+                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} is suspected of using {metadata.detection.Name} ({metadata.reason})");
                     break;
                 }
 
                 case ActionType.Kick:
                 {
-                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name}");
+                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
                     PlayerUtils.KickPlayer(metadata.player.Controller, $"Kicked for usage of {metadata.detection.Name}");
                     break;
                 }

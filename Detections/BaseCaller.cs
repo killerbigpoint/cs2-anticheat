@@ -14,7 +14,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnPlayerJoin) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -29,7 +29,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnPlayerLeave) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -44,7 +44,22 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnPlayerDead) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                }
+            }
+        }
+
+        internal static void OnPlayerShoot(PlayerData player)
+        {
+            foreach (BaseDetection detection in Globals.Detections)
+            {
+                try
+                {
+                    detection.OnPlayerShoot(player);
+                }
+                catch (Exception e)
+                {
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -59,7 +74,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnPlayerTick) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -74,7 +89,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnRoundStart) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -89,7 +104,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnRoundEnd) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -104,7 +119,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch(Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} (OnGameTick) -> {e.Message}");
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }

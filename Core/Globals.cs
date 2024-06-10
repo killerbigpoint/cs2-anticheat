@@ -32,7 +32,6 @@ namespace TBAntiCheat.Core
             [
                 new Aimbot(),
                 new Backtrack(),
-                new EyePosition(),
                 new EyeAngles(),
                 new RapidFire()
             ];

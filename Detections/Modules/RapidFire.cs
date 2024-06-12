@@ -13,10 +13,14 @@ namespace TBAntiCheat.Detections.Modules
         public ActionType DetectionAction { get; set; } = ActionType.Log;
     }
 
-    //NOTE: This is by far production ready. It needs a lot of testing so keep that in mind when using this
+    /*
+     * Module: Rapid Fire
+     * Purpose: Detect rapid fire where weapons can fire at speeds that are not normal, either within the same tick or the ticks after
+     * NOTE: This is not production ready. It needs a lot of testing so keep that in mind when using this
+     */
     internal class RapidFire : BaseDetection
     {
-        internal override string Name => "EyeAngles";
+        internal override string Name => "RapidFire";
         internal override ActionType ActionType => config.Config.DetectionAction;
 
         private readonly BaseConfig<RapidFireSaveData> config;

@@ -96,6 +96,10 @@ namespace TBAntiCheat.Detections.Modules
         }
     }
 
+    /*
+     * Module: Aimbot
+     * Purpose: Detect players which flick with their eye angles at high velocity. Nobody can reliably flick 20+ degrees in a single tick and still hit players
+     */
     internal class Aimbot : BaseDetection
     {
         private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)

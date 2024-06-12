@@ -13,6 +13,11 @@ namespace TBAntiCheat.Detections.Modules
         public ActionType DetectionAction { get; set; } = ActionType.Kick;
     }
 
+    /*
+     * Module: Eye Angles
+     * Purpose: Detect players which use eye angles that are outside the normal limit.
+     * NOTE: Is this even needed anymore in CS2?
+     */
     internal class EyeAngles : BaseDetection
     {
         internal override string Name => "EyeAngles";

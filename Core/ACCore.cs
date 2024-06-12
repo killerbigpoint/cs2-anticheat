@@ -21,7 +21,9 @@ namespace TBAntiCheat.Core
             core = this;
             logger = Logger;
 
+            BanHandler.InitializeBanHandler();
             CommandHandler.InitializeCommandHandler(this);
+
             EventListeners.InitializeListeners(this);
             EventHandlers.InitializeHandlers(this);
 

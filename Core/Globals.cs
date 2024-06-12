@@ -22,7 +22,7 @@ namespace TBAntiCheat.Core
 
         internal static void Initialize()
         {
-            if (InitializedOnce)
+            if (InitializedOnce == true)
             {
                 return;
             }

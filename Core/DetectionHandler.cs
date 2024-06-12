@@ -11,7 +11,7 @@ namespace TBAntiCheat.Core
         internal string reason;
     }
 
-    internal class DetectedSystem
+    internal static class DetectionHandler
     {
         internal static void OnPlayerDetected(DetectionMetadata metadata)
         {
@@ -28,12 +28,18 @@ namespace TBAntiCheat.Core
                 case ActionType.Kick:
                 {
                     ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
-                    PlayerUtils.KickPlayer(metadata.player.Controller, $"Kicked for usage of {metadata.detection.Name}");
+                    PlayerUtils.KickPlayer(metadata.player, $"Kicked for usage of {metadata.detection.Name}");
+
                     break;
                 }
 
                 case ActionType.Ban:
                 {
+                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
+
+                    BanHandler.BanPlayer(metadata.player, $"Kicked for usage of {metadata.detection.Name}");
+                    PlayerUtils.KickPlayer(metadata.player, $"Kicked for usage of {metadata.detection.Name}");
+
                     break;
                 }
             }

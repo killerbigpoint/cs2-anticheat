@@ -7,7 +7,7 @@ using TBAntiCheat.Handlers;
 
 namespace TBAntiCheat.Detections.Modules
 {
-    public class EyeAnglesSaveData
+    public class UntrustedAnglesSaveData
     {
         public bool DetectionEnabled { get; set; } = true;
         public ActionType DetectionAction { get; set; } = ActionType.Kick;
@@ -18,19 +18,19 @@ namespace TBAntiCheat.Detections.Modules
      * Purpose: Detect players which use eye angles that are outside the normal limit.
      * NOTE: Is this even needed anymore in CS2?
      */
-    internal class EyeAngles : BaseDetection
+    internal class UntrustedAngles : BaseDetection
     {
-        internal override string Name => "EyeAngles";
+        internal override string Name => "UntrustedAngles";
         internal override ActionType ActionType => config.Config.DetectionAction;
 
-        private readonly BaseConfig<EyeAnglesSaveData> config;
+        private readonly BaseConfig<UntrustedAnglesSaveData> config;
 
-        internal EyeAngles() : base()
+        internal UntrustedAngles() : base()
         {
-            config = new BaseConfig<EyeAnglesSaveData>("EyeAngles");
+            config = new BaseConfig<UntrustedAnglesSaveData>("UntrustedAngles");
 
-            CommandHandler.RegisterCommand("tbac_eyeangles_enable", "Deactivates/Activates EyeAngle detections", OnEnableCommand);
-            CommandHandler.RegisterCommand("tbac_eyeangles_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
+            CommandHandler.RegisterCommand("tbac_untrustedangles_enable", "Deactivates/Activates UntrustedAngles detections", OnEnableCommand);
+            CommandHandler.RegisterCommand("tbac_untrustedangles_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
         }
 
         internal override void OnPlayerTick(PlayerData player)
@@ -45,7 +45,7 @@ namespace TBAntiCheat.Detections.Modules
             float y = eyeAngles.Y;
             float z = eyeAngles.Z;
 
-            //Normal eye angles. Anything outside of this is abnormal
+            //Normal eye angles. Anything outside of this is untrusted
             if (x >= -89f && x <= 89f &&
                 y >= -180f && y <= 180f &&
                 z >= -50f && z <= 50f)
@@ -53,7 +53,7 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            string reason = $"Abnormal EyeAngles -> {x} {y} {z}";
+            string reason = $"Untrusted EyeAngles -> {x} {y} {z}";
             OnPlayerDetected(player, reason);
         }
 

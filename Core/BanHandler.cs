@@ -4,7 +4,7 @@ namespace TBAntiCheat.Core
 {
     public class BanHandlerSaveData
     {
-        public List<BanMetadata> Bans { get; set; }
+        public List<BanMetadata> Bans { get; set; } = new List<BanMetadata>();
     }
 
     public class BanMetadata

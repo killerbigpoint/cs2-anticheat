@@ -32,8 +32,10 @@ namespace TBAntiCheat.Core
             [
                 new Aimbot(),
                 new Backtrack(),
-                new UntrustedAngles(),
-                new RapidFire()
+                new BunnyHop(),
+                new NoSpread(),
+                new RapidFire(),
+                new UntrustedAngles()
             ];
 
             InitializedOnce = true;

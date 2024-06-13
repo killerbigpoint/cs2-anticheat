@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
@@ -14,9 +15,8 @@ namespace TBAntiCheat.Detections.Modules
     }
 
     /*
-     * Module: Eye Angles
-     * Purpose: Detect players which use eye angles that are outside the normal limit.
-     * NOTE: Is this even needed anymore in CS2?
+     * Module: Untrusted Angles
+     * Purpose: Detect players which use eye angles that are outside the normal limit
      */
     internal class UntrustedAngles : BaseDetection
     {
@@ -41,20 +41,31 @@ namespace TBAntiCheat.Detections.Modules
             }
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
-            float x = eyeAngles.X;
-            float y = eyeAngles.Y;
-            float z = eyeAngles.Z;
+            float pitch = eyeAngles.X;
+            float yaw = eyeAngles.Y;
+            float roll = eyeAngles.Z;
 
-            //Normal eye angles. Anything outside of this is untrusted
-            if (x >= -89f && x <= 89f &&
-                y >= -180f && y <= 180f &&
-                z >= -50f && z <= 50f)
+            if (pitch < -89f || pitch > 89f)
             {
+                string reason = $"Untrusted EyeAngles Pitch -> {pitch}";
+                OnPlayerDetected(player, reason);
+
                 return;
             }
+            else if (yaw < -180f || yaw > 180f)
+            {
+                string reason = $"Untrusted EyeAngles Yaw -> {yaw}";
+                OnPlayerDetected(player, reason);
 
-            string reason = $"Untrusted EyeAngles -> {x} {y} {z}";
-            OnPlayerDetected(player, reason);
+                return;
+            }
+            else if (roll < -50f || roll > -50f)
+            {
+                string reason = $"Untrusted EyeAngles Roll -> {roll}";
+                OnPlayerDetected(player, reason);
+
+                return;
+            }
         }
 
         // ----- Commands ----- \\

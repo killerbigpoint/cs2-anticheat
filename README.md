@@ -12,6 +12,7 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 - [ ] Backtrack
 - [x] Rapid-Fire (WIP)
 - [ ] Bunnyhop (WIP)
+- [ ] No-Spread Detection (WIP)
 - [ ] Anti-Wallhack? (Depends on how limited we are with CS2 - technical speaking it might not be possible without hooking into the engine, too much work, etc)
 
 ## Installation

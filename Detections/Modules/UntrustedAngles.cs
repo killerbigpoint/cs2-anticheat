@@ -59,7 +59,7 @@ namespace TBAntiCheat.Detections.Modules
 
                 return;
             }
-            else if (roll < -50f || roll > -50f)
+            else if (roll < -50f || roll > 50f)
             {
                 string reason = $"Untrusted EyeAngles Roll -> {roll}";
                 OnPlayerDetected(player, reason);

@@ -34,6 +34,21 @@ namespace TBAntiCheat.Detections
             }
         }
 
+        internal static void OnPlayerHurt(PlayerData victim, PlayerData shooter)
+        {
+            foreach (BaseDetection detection in Globals.Detections)
+            {
+                try
+                {
+                    detection.OnPlayerHurt(victim, shooter);
+                }
+                catch (Exception e)
+                {
+                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                }
+            }
+        }
+
         internal static void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
             foreach (BaseDetection detection in Globals.Detections)

@@ -11,6 +11,8 @@ namespace TBAntiCheat.Handlers
         {
             plugin.RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull);
             plugin.RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
+
+            plugin.RegisterEventHandler<EventPlayerJump>(OnPlayerJump);
             plugin.RegisterEventHandler<EventPlayerHurt>(OnPlayerHurt);
             plugin.RegisterEventHandler<EventPlayerDeath>(OnPlayerDeath);
 
@@ -73,6 +75,29 @@ namespace TBAntiCheat.Handlers
 
             BaseCaller.OnPlayerLeave(player);
             Globals.Players.Remove(controller.Index);
+
+            return HookResult.Continue;
+        }
+
+        private static HookResult OnPlayerJump(EventPlayerJump jumpEvent, GameEventInfo _)
+        {
+            if (jumpEvent.Userid == null)
+            {
+                return HookResult.Continue;
+            }
+
+            if (jumpEvent.Userid.IsBot == true)
+            {
+                return HookResult.Continue;
+            }
+
+            if (Globals.Players.ContainsKey(jumpEvent.Userid.Index) == false)
+            {
+                return HookResult.Continue;
+            }
+
+            PlayerData player = Globals.Players[jumpEvent.Userid.Index];
+            BaseCaller.OnPlayerJump(player);
 
             return HookResult.Continue;
         }

@@ -2,9 +2,12 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Entities;
 using CounterStrikeSharp.API.Modules.Utils;
+using System.Numerics;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TBAntiCheat.Detections.Modules
 {
@@ -16,9 +19,11 @@ namespace TBAntiCheat.Detections.Modules
 
     internal class BunnyHopData
     {
-        internal bool grounded;
-        internal int groundedTick;
+        internal bool lastOnGround;
+        internal int lastGroundedTick;
         internal bool lastTickPerfect;
+
+        internal float lastLandTime;
 
         internal int perfectBhops;
     }
@@ -49,8 +54,8 @@ namespace TBAntiCheat.Detections.Modules
         {
             playerData.Add(player.Index, new BunnyHopData()
             {
-                grounded = true,
-                groundedTick = 0,
+                lastOnGround = true,
+                lastGroundedTick = 0,
                 lastTickPerfect = false,
 
                 perfectBhops = 0
@@ -62,44 +67,91 @@ namespace TBAntiCheat.Detections.Modules
             playerData.Remove(player.Index);
         }
 
+        internal override void OnPlayerShoot(PlayerData player)
+        {
+            PlayerFlags flags = (PlayerFlags)player.Pawn.Flags;
+            bool onGround = flags.HasFlag(PlayerFlags.FL_ONGROUND);
+
+            Server.PrintToChatAll($"{player.Controller.PlayerName} | FL_ONGROUND -> {onGround}");
+        }
+
+        internal override void OnPlayerJump(PlayerData player)
+        {
+            Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped Goofy Ass Mf");
+        }
+
         internal override void OnPlayerTick(PlayerData player)
         {
             BunnyHopData data = playerData[player.Index];
-            bool playerGrounded = player.Pawn.OnGroundLastTick;
 
-            if (data.grounded != playerGrounded)
+            PlayerButtons buttons = player.Controller.Buttons;
+            if (buttons.HasFlag(PlayerButtons.Jump) == true)
             {
-                if (playerGrounded == false)
-                {
-                    int tickDiff = Server.TickCount - data.groundedTick;
-                    if (tickDiff == 1)
-                    {
-                        data.lastTickPerfect = true;
-                        if (data.lastTickPerfect == true)
-                        {
-                            data.perfectBhops++;
-                            Server.PrintToChatAll($"{player.Controller.PlayerName} Perfect Bhops -> {data.perfectBhops}");
+                Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
+            }
 
-                            if (data.perfectBhops >= 5)
-                            {
-                                Server.PrintToChatAll($"{player.Controller.PlayerName} might be using bunnyhop hack");
-                            }
-                        }
-                    }
-                    else
+            /*PlayerFlags playerFlags = (PlayerFlags)player.Pawn.Flags;
+            bool playerOnGround = playerFlags.HasFlag(PlayerFlags.FL_ONGROUND);
+
+            float lastLandTime = player.Pawn.LastLandTime;
+            if (data.lastLandTime != lastLandTime)
+            {
+                Server.PrintToChatAll($"{player.Controller.PlayerName} -> LastLandTime: {lastLandTime}");
+                data.lastLandTime = lastLandTime;
+            }
+
+            if (data.lastOnGround != playerOnGround)
+            {
+                if (playerOnGround == true)
+                {
+                    Server.PrintToChatAll($"{player.Controller.PlayerName} -> Landed");
+                }
+                else
+                {
+                    Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
+                }
+
+                data.lastOnGround = playerOnGround;
+            }*/
+        }
+
+        /*private void OnGrounded()
+        {
+            if (playerGrounded == false)
+            {
+                int tickDiff = Server.TickCount - data.lastGroundedTick;
+                if (tickDiff == 1)
+                {
+                    data.lastTickPerfect = true;
+                    if (data.lastTickPerfect == true)
                     {
-                        data.lastTickPerfect = false;
-                        data.perfectBhops = 0;
+                        data.perfectBhops++;
+                        Server.PrintToChatAll($"{player.Controller.PlayerName} Perfect Bhops -> {data.perfectBhops}");
+
+                        if (data.perfectBhops >= 5)
+                        {
+                            Server.PrintToChatAll($"{player.Controller.PlayerName} might be using bunnyhop hack");
+                        }
                     }
                 }
                 else
                 {
-                    data.groundedTick = Server.TickCount;
+                    data.lastTickPerfect = false;
+                    data.perfectBhops = 0;
                 }
-
-                data.grounded = playerGrounded;
             }
+            else
+            {
+                data.lastGroundedTick = Server.TickCount;
+            }
+
+            data.lastGroundedTime = lastLandTime;
         }
+
+        private void OnJump()
+        {
+
+        }*/
 
         // ----- Commands ----- \\
 

@@ -71,7 +71,7 @@ namespace TBAntiCheat.Detections.Modules
                 {
                     if (serverTickCount < weapon.NextSecondaryAttackTick)
                     {
-                        string reason = $"Abnormal FireRate ->  {weapon.NextSecondaryAttackTick - serverTickCount} tick cooldown | Secondary Fire";
+                        string reason = $"RapidFire ->  {weapon.NextSecondaryAttackTick - serverTickCount} tick cooldown | Secondary Fire";
                         OnPlayerDetected(player, reason);
                     }
                 }
@@ -79,7 +79,7 @@ namespace TBAntiCheat.Detections.Modules
                 {
                     if (serverTickCount < weapon.NextPrimaryAttackTick)
                     {
-                        string reason = $"Abnormal FireRate ->  {weapon.NextSecondaryAttackTick - serverTickCount} tick cooldown | Primary Fire";
+                        string reason = $"RapidFire ->  {weapon.NextSecondaryAttackTick - serverTickCount} tick cooldown | Primary Fire";
                         OnPlayerDetected(player, reason);
                     }
                 }

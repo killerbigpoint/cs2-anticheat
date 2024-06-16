@@ -89,69 +89,7 @@ namespace TBAntiCheat.Detections.Modules
             {
                 Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
             }
-
-            /*PlayerFlags playerFlags = (PlayerFlags)player.Pawn.Flags;
-            bool playerOnGround = playerFlags.HasFlag(PlayerFlags.FL_ONGROUND);
-
-            float lastLandTime = player.Pawn.LastLandTime;
-            if (data.lastLandTime != lastLandTime)
-            {
-                Server.PrintToChatAll($"{player.Controller.PlayerName} -> LastLandTime: {lastLandTime}");
-                data.lastLandTime = lastLandTime;
-            }
-
-            if (data.lastOnGround != playerOnGround)
-            {
-                if (playerOnGround == true)
-                {
-                    Server.PrintToChatAll($"{player.Controller.PlayerName} -> Landed");
-                }
-                else
-                {
-                    Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
-                }
-
-                data.lastOnGround = playerOnGround;
-            }*/
         }
-
-        /*private void OnGrounded()
-        {
-            if (playerGrounded == false)
-            {
-                int tickDiff = Server.TickCount - data.lastGroundedTick;
-                if (tickDiff == 1)
-                {
-                    data.lastTickPerfect = true;
-                    if (data.lastTickPerfect == true)
-                    {
-                        data.perfectBhops++;
-                        Server.PrintToChatAll($"{player.Controller.PlayerName} Perfect Bhops -> {data.perfectBhops}");
-
-                        if (data.perfectBhops >= 5)
-                        {
-                            Server.PrintToChatAll($"{player.Controller.PlayerName} might be using bunnyhop hack");
-                        }
-                    }
-                }
-                else
-                {
-                    data.lastTickPerfect = false;
-                    data.perfectBhops = 0;
-                }
-            }
-            else
-            {
-                data.lastGroundedTick = Server.TickCount;
-            }
-
-            data.lastGroundedTime = lastLandTime;
-        }
-
-        private void OnJump()
-        {
-
-        }*/
 
         // ----- Commands ----- \\
 

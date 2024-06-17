@@ -11,6 +11,15 @@ namespace TBAntiCheat.Detections.Modules
     {
         public bool DetectionEnabled { get; set; } = true;
         public ActionType DetectionAction { get; set; } = ActionType.Log;
+        public int MaxDetectionsBeforeAction { get; set; } = 5;
+    }
+
+    internal class RapidFireData
+    {
+        internal int lastBulletShotTick;
+        internal int lastAttackTick;
+
+        internal int rapidDetections;
     }
 
     /*
@@ -24,13 +33,26 @@ namespace TBAntiCheat.Detections.Modules
         internal override ActionType ActionType => config.Config.DetectionAction;
 
         private readonly BaseConfig<RapidFireSaveData> config;
+        private readonly Dictionary<int, RapidFireData> playerData;
 
         internal RapidFire() : base()
         {
             config = new BaseConfig<RapidFireSaveData>("RapidFire");
+            playerData = new Dictionary<int, RapidFireData>(Server.MaxPlayers);
 
             CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates RapidFire detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_rapidfire_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
+        }
+
+        internal override void OnPlayerJoin(PlayerData player)
+        {
+            playerData[player.Index] = new RapidFireData()
+            {
+                lastBulletShotTick = 0,
+                lastAttackTick = 0,
+                
+                rapidDetections = 0
+            };
         }
 
         internal override void OnPlayerShoot(PlayerData player)
@@ -46,44 +68,51 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            CCSWeaponBaseGun? weapon = weaponServices.ActiveWeapon.Value as CCSWeaponBaseGun;
-            if (weapon == null)
+            CBasePlayerWeapon? weaponBase = weaponServices.ActiveWeapon.Value;
+            if (weaponBase == null)
             {
                 return;
             }
 
-            int serverTickCount = Server.TickCount;
+            CCSWeaponBaseGun weapon = new CCSWeaponBaseGun(weaponBase.Handle);
+
+            int nextAttack;
             switch (weapon.WeaponMode)
             {
-                case CSWeaponMode.Primary_Mode:
-                {
-                    Server.PrintToChatAll($"{player.Controller.PlayerName} | ServerTick: {serverTickCount} | Primary: {weapon.NextPrimaryAttackTick}");
-                    /*if (serverTickCount < weapon.NextPrimaryAttackTick)
-                    {
-                        string reason = $"RapidFire ->  {weapon.NextSecondaryAttackTick - serverTickCount} tick cooldown | Primary Fire";
-                        OnPlayerDetected(player, reason);
-                    }*/
-
-                    break;
-                }
-
-                case CSWeaponMode.Secondary_Mode:
-                {
-                    Server.PrintToChatAll($"{player.Controller.PlayerName} | ServerTick: {serverTickCount} | Secondary: {weapon.NextPrimaryAttackTick}");
-                    /*if (serverTickCount < weapon.NextSecondaryAttackTick)
-                    {
-                        string reason = $"RapidFire ->  {weapon.NextSecondaryAttackTick - serverTickCount} tick cooldown | Secondary Fire";
-                        OnPlayerDetected(player, reason);
-                    }*/
-
-                    break;
-                }
-
-                default: //Unsupported type which doesn't exist?
-                {
-                    break;
-                }
+                case CSWeaponMode.Primary_Mode: nextAttack = weapon.NextPrimaryAttackTick; break;
+                case CSWeaponMode.Secondary_Mode: nextAttack = weapon.NextSecondaryAttackTick; break;
+                default: return;
             }
+
+            int serverTickCount = Server.TickCount;
+            RapidFireData data = playerData[player.Index];
+
+            int tickDiff = serverTickCount - data.lastBulletShotTick;
+            if (tickDiff > 32)
+            {
+                data.lastBulletShotTick = serverTickCount;
+                return;
+            }
+
+            int nextAttackDiff = serverTickCount - nextAttack;
+            if (tickDiff == 1)
+            {
+                data.rapidDetections++;
+            }
+            else if (nextAttackDiff > 32)
+            {
+                data.rapidDetections++;
+            }
+
+            if (data.rapidDetections >= config.Config.MaxDetectionsBeforeAction)
+            {
+                string reason = $"RapidFire -> TickDiff: {tickDiff} | NextAttackDiff: {nextAttack}";
+                OnPlayerDetected(player, reason);
+
+                data.rapidDetections = 0;
+            }
+
+            data.lastBulletShotTick = serverTickCount;
         }
 
         // ----- Commands ----- \\

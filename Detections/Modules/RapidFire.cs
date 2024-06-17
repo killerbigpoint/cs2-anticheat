@@ -10,7 +10,7 @@ namespace TBAntiCheat.Detections.Modules
     public class RapidFireSaveData
     {
         public bool DetectionEnabled { get; set; } = true;
-        public ActionType DetectionAction { get; set; } = ActionType.Log;
+        public ActionType DetectionAction { get; set; } = ActionType.Kick;
         public int MaxDetectionsBeforeAction { get; set; } = 5;
     }
 

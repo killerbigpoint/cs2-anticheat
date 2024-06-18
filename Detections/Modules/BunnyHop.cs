@@ -2,12 +2,9 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Entities;
 using CounterStrikeSharp.API.Modules.Utils;
-using System.Numerics;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TBAntiCheat.Detections.Modules
 {
@@ -72,7 +69,7 @@ namespace TBAntiCheat.Detections.Modules
             PlayerFlags flags = (PlayerFlags)player.Pawn.Flags;
             bool onGround = flags.HasFlag(PlayerFlags.FL_ONGROUND);
 
-            Server.PrintToChatAll($"{player.Controller.PlayerName} | FL_ONGROUND -> {onGround}");
+            //Server.PrintToChatAll($"{player.Controller.PlayerName} | FL_ONGROUND -> {onGround}");
         }
 
         internal override void OnPlayerJump(PlayerData player)

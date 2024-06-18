@@ -86,7 +86,6 @@ namespace TBAntiCheat.Detections.Modules
 
         internal void Reset()
         {
-            detections = 0;
             historyIndex = 0;
 
             for (int i = 0; i < eyeAngleHistory.Length; i++)
@@ -109,7 +108,7 @@ namespace TBAntiCheat.Detections.Modules
 
         internal Aimbot() : base()
         {
-            config = new BaseConfig<AimbotSaveData>("AimbotConfig");
+            config = new BaseConfig<AimbotSaveData>("Aimbot");
             eyeAngleHistory = new PlayerAimbotData[Server.MaxPlayers];
 
             CommandHandler.RegisterCommand("tbac_aimbot_enable", "Activates/Deactivates the aimbot detection", OnEnableCommand);
@@ -132,10 +131,14 @@ namespace TBAntiCheat.Detections.Modules
             };
         }
 
-        internal override void OnPlayerLeave(PlayerData player)
+        internal override void OnPlayerShoot(PlayerData player)
         {
             PlayerAimbotData aimbotData = eyeAngleHistory[player.Index];
-            aimbotData.Reset();
+
+            AngleSnapshot lastAngle = aimbotData.eyeAngleHistory[aimbotData.historyIndex];
+            AngleSnapshot newAngle = new AngleSnapshot(player.Pawn.EyeAngles);
+
+            Server.PrintToChatAll($"Test: {player.Controller.PlayerName} -> New: {newAngle} | {lastAngle}");
         }
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
@@ -157,9 +160,10 @@ namespace TBAntiCheat.Detections.Modules
 
             float maxAngle = config.Config.MaxAimbotAngle;
 
-            for (int i = 1; i < aimbotMaxHistory; i++)
+            historyIndex++;
+            for (int i = historyIndex; i < aimbotMaxHistory; i++)
             {
-                if (historyIndex == aimbotMaxHistory)
+                if (historyIndex >= aimbotMaxHistory)
                 {
                     historyIndex = 0;
                 }
@@ -172,6 +176,8 @@ namespace TBAntiCheat.Detections.Modules
                 {
                     angleDiff = MathF.Abs(angleDiff - 360);
                 }
+
+                Server.PrintToChatAll($"{i}: {shooter.Controller.PlayerName} -> {angleDiff}");
 
                 if (angleDiff > maxAngle)
                 {

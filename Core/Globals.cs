@@ -35,7 +35,7 @@ namespace TBAntiCheat.Core
                 new BunnyHop(),
                 new NoSpread(),
                 new RapidFire(),
-                new UntrustedAngles()
+                //new UntrustedAngles()
             ];
 
             InitializedOnce = true;

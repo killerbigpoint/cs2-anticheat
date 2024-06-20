@@ -10,7 +10,7 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 - [x] Aimbot Detection
 - [x] Untrusted Angles
 - [ ] Backtrack
-- [ ] Rapid-Fire (WIP)
+- [x] Rapid-Fire
 - [ ] Bunnyhop (WIP)
 - [ ] No-Spread Detection (WIP)
 

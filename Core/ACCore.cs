@@ -27,6 +27,11 @@ namespace TBAntiCheat.Core
             EventListeners.InitializeListeners(this);
             EventHandlers.InitializeHandlers(this);
 
+            if (hotReload == true)
+            {
+                Globals.Initialize(true);
+            }
+
             Log($"[TBAC] Loaded (v{ModuleVersion})");
         }
 

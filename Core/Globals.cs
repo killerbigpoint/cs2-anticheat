@@ -27,9 +27,9 @@ namespace TBAntiCheat.Core
             pluginCore = core;
         }
 
-        internal static void Initialize()
+        internal static void Initialize(bool hotReload)
         {
-            if (InitializedOnce == true)
+            if (InitializedOnce == true && hotReload == false)
             {
                 return;
             }

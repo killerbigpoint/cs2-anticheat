@@ -14,7 +14,7 @@ namespace TBAntiCheat.Handlers
 
         private static void OnMapStart(string mapName)
         {
-            Globals.Initialize();
+            Globals.Initialize(false);
         }
 
         private static void OnGameTick()

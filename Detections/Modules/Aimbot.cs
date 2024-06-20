@@ -98,6 +98,7 @@ namespace TBAntiCheat.Detections.Modules
     /*
      * Module: Aimbot
      * Purpose: Detect players which flick with their eye angles at high velocity. Nobody can reliably flick 20+ degrees in a single tick and still hit players
+     * NOTE: For some reason EyeAngles is not properly synched from client to server I think? Either way this module will always be unreliable against rage hackers
      */
     internal class Aimbot : BaseDetection
     {
@@ -129,16 +130,6 @@ namespace TBAntiCheat.Detections.Modules
 
                 detections = 0
             };
-        }
-
-        internal override void OnPlayerShoot(PlayerData player)
-        {
-            PlayerAimbotData aimbotData = eyeAngleHistory[player.Index];
-
-            AngleSnapshot lastAngle = aimbotData.eyeAngleHistory[aimbotData.historyIndex];
-            AngleSnapshot newAngle = new AngleSnapshot(player.Pawn.EyeAngles);
-
-            Server.PrintToChatAll($"Test: {player.Controller.PlayerName} -> New: {newAngle} | {lastAngle}");
         }
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
@@ -176,8 +167,6 @@ namespace TBAntiCheat.Detections.Modules
                 {
                     angleDiff = MathF.Abs(angleDiff - 360);
                 }
-
-                Server.PrintToChatAll($"{i}: {shooter.Controller.PlayerName} -> {angleDiff}");
 
                 if (angleDiff > maxAngle)
                 {

@@ -26,10 +26,13 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Upload dotnet test results
+    - name: Create Output Folder
+      run: |
+          mkdir -p Output/TBAntiCheat
+          mv ./cs2-anticheat/bin/Debug/net8.0/TBAntiCheat.dll Output/TBAntiCheat/
+          mv ./cs2-anticheat/bin/Debug/net8.0/TBAntiCheat.pdb Output/TBAntiCheat/
+    - name: Publish Artifact
       uses: actions/upload-artifact@v4
       with:
-            name: dotnet-results-${{ matrix.dotnet-version }}
-            path: TestResults-${{ matrix.dotnet-version }}
-          # Use always() to always run this step to publish test results when there are test failures
-      if: ${{ always() }}
+          name: TBAntiCheat-${{ github.sha }}
+          path: Output

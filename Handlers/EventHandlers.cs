@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using TBAntiCheat.Core;
 using TBAntiCheat.Detections;
 using TBAntiCheat.Utils;
@@ -7,7 +8,7 @@ namespace TBAntiCheat.Handlers
 {
     internal static class EventHandlers
     {
-        internal static void InitializeHandlers(BasePlugin plugin)
+        internal static void InitializeHandlers(BasePlugin plugin, bool hotReload)
         {
             plugin.RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull);
             plugin.RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
@@ -20,6 +21,14 @@ namespace TBAntiCheat.Handlers
 
             plugin.RegisterEventHandler<EventRoundStart>(OnRoundStart);
             plugin.RegisterEventHandler<EventRoundEnd>(OnRoundEnd);
+
+            if (hotReload == true)
+            {
+                foreach (CCSPlayerController controller in Utilities.GetPlayers())
+                {
+                    JoinPlayer(controller);
+                }
+            }
         }
 
         private static HookResult OnPlayerConnectFull(EventPlayerConnectFull connectEvent, GameEventInfo _)
@@ -30,10 +39,17 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
+            JoinPlayer(controller);
+
+            return HookResult.Continue;
+        }
+
+        private static void JoinPlayer(CCSPlayerController controller)
+        {
             CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
             if (pawn == null)
             {
-                return HookResult.Continue;
+                return;
             }
 
             PlayerData player = new PlayerData()
@@ -49,13 +65,11 @@ namespace TBAntiCheat.Handlers
                 string reason = BanHandler.GetBanReason(player);
                 PlayerUtils.KickPlayer(player, reason);
 
-                return HookResult.Continue;
+                return;
             }
 
             Globals.Players.Add(controller.Index, player);
             BaseCaller.OnPlayerJoin(player);
-
-            return HookResult.Continue;
         }
 
         private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)

@@ -17,7 +17,7 @@ namespace TBAntiCheat.Core
 
         internal BaseConfig(string path)
         {
-            string folderPath = $"{ACCore.GetCore().ModuleDirectory}/Configs/";
+            string folderPath = $"{Globals.GetModuleDirectory()}/Configs/";
             if (Directory.Exists(folderPath) == false)
             {
                 Directory.CreateDirectory(folderPath);
@@ -46,8 +46,14 @@ namespace TBAntiCheat.Core
             }
 
             string json = File.ReadAllText(configPath);
-            Config = JsonSerializer.Deserialize<T>(json, BaseConfig.JsonSerializerOptions);
+            T? possibleConfig = JsonSerializer.Deserialize<T>(json, BaseConfig.JsonSerializerOptions);
 
+            if (possibleConfig == null)
+            {
+                return false;
+            }
+
+            Config = possibleConfig;
             return true;
         }
     }

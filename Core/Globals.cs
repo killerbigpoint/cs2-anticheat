@@ -17,8 +17,15 @@ namespace TBAntiCheat.Core
     {
         private static bool InitializedOnce = false;
 
-        internal static Dictionary<uint, PlayerData> Players = null;
-        internal static BaseDetection[] Detections = null;
+        private static ACCore? pluginCore = null;
+
+        internal static Dictionary<uint, PlayerData> Players = [];
+        internal static BaseDetection[] Detections = [];
+
+        internal static void PreInit(ACCore core)
+        {
+            pluginCore = core;
+        }
 
         internal static void Initialize()
         {
@@ -39,6 +46,16 @@ namespace TBAntiCheat.Core
             ];
 
             InitializedOnce = true;
+        }
+
+        internal static string GetModuleDirectory()
+        {
+            if (pluginCore == null)
+            {
+                return string.Empty;
+            }
+
+            return pluginCore.ModuleDirectory;
         }
     }
 }

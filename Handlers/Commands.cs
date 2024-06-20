@@ -5,7 +5,7 @@ namespace TBAntiCheat.Handlers
 {
     internal static class CommandHandler
     {
-        private static BasePlugin plugin;
+        private static BasePlugin? plugin;
 
         internal static void InitializeCommandHandler(BasePlugin basePlugin)
         {
@@ -14,6 +14,11 @@ namespace TBAntiCheat.Handlers
 
         internal static bool RegisterCommand(string command, string description, CommandInfo.CommandCallback handler)
         {
+            if (plugin == null)
+            {
+                return false;
+            }
+
             if (string.IsNullOrEmpty(command) == true)
             {
                 return false;

@@ -16,7 +16,7 @@ namespace TBAntiCheat.Core
 
     internal static class BanHandler
     {
-        private static BaseConfig<BanHandlerSaveData> config;
+        private static BaseConfig<BanHandlerSaveData>? config;
 
         internal static void InitializeBanHandler()
         {
@@ -42,6 +42,12 @@ namespace TBAntiCheat.Core
                 Reason = reason,
                 LastKnownUsername = player.Controller.PlayerName
             };
+
+            if (config == null)
+            {
+                return;
+            }
+
             config.Config.Bans.Add(metadata);
         }
 
@@ -58,6 +64,11 @@ namespace TBAntiCheat.Core
 
         internal static bool IsPlayerBanned(SteamID steamID)
         {
+            if (config == null)
+            {
+                return false;
+            }
+
             List<BanMetadata> banList = config.Config.Bans;
             int banListCount = banList.Count;
 
@@ -85,6 +96,11 @@ namespace TBAntiCheat.Core
 
         internal static string GetBanReason(SteamID steamID)
         {
+            if (config == null)
+            {
+                return string.Empty;
+            }
+
             List<BanMetadata> banList = config.Config.Bans;
             int banListCount = banList.Count;
 

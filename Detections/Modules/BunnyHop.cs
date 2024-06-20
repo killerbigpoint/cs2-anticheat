@@ -16,12 +16,6 @@ namespace TBAntiCheat.Detections.Modules
 
     internal class BunnyHopData
     {
-        internal bool lastOnGround;
-        internal int lastGroundedTick;
-        internal bool lastTickPerfect;
-
-        internal float lastLandTime;
-
         internal int perfectBhops;
     }
 
@@ -51,10 +45,6 @@ namespace TBAntiCheat.Detections.Modules
         {
             playerData.Add(player.Index, new BunnyHopData()
             {
-                lastOnGround = true,
-                lastGroundedTick = 0,
-                lastTickPerfect = false,
-
                 perfectBhops = 0
             });
         }

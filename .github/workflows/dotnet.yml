@@ -26,8 +26,9 @@ jobs:
       run: |
           ls
           mkdir -p Output/TBAntiCheat
-          mv ./cs2-anticheat/bin/Debug/net8.0/TBAntiCheat.dll Output/TBAntiCheat/
-          mv ./cs2-anticheat/bin/Debug/net8.0/TBAntiCheat.pdb Output/TBAntiCheat/
+          mv bin/Debug/net8.0/TBAntiCheat.dll Output/TBAntiCheat/
+          mv bin/Debug/net8.0/TBAntiCheat.pdb Output/TBAntiCheat/
+          cd Output
     - name: Publish Artifact
       uses: actions/upload-artifact@v4
       with:

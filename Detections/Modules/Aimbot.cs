@@ -17,6 +17,124 @@ namespace TBAntiCheat.Detections.Modules
         public int MaxDetectionsBeforeAction { get; set; } = 2;
     }
 
+    internal struct Quaternion
+    {
+        internal float x;
+        internal float y;
+        internal float z;
+        internal float w;
+
+        public Quaternion()
+        {
+            Reset();
+        }
+
+        public Quaternion(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        public Quaternion(AngleSnapshot euler)
+        {
+            Quaternion quat = EulerToQuaternion(euler.x, euler.y, euler.z);
+            x = quat.x;
+            y = quat.y;
+            z = quat.z;
+            w = quat.w;
+        }
+
+        public Quaternion(Vector? vector)
+        {
+            if (vector == null)
+            {
+                Reset();
+                return;
+            }
+
+            Quaternion quat = EulerToQuaternion(vector.X, vector.Y, vector.Z);
+            x = quat.x;
+            y = quat.y;
+            z = quat.z;
+            w = quat.w;
+        }
+
+        public Quaternion(QAngle? angle)
+        {
+            if (angle == null)
+            {
+                Reset();
+                return;
+            }
+
+            Quaternion quat = EulerToQuaternion(angle.X, angle.Y, angle.Z);
+            x = quat.x;
+            y = quat.y;
+            z = quat.z;
+            w = quat.w;
+        }
+
+        public static AngleSnapshot operator *(Quaternion rotation, AngleSnapshot point)
+        {
+            float num = rotation.x * 2f;
+            float num2 = rotation.y * 2f;
+            float num3 = rotation.z * 2f;
+
+            float num4 = rotation.x * num;
+            float num5 = rotation.y * num2;
+            float num6 = rotation.z * num3;
+
+            float num7 = rotation.x * num2;
+            float num8 = rotation.x * num3;
+            float num9 = rotation.y * num3;
+
+            float num10 = rotation.w * num;
+            float num11 = rotation.w * num2;
+            float num12 = rotation.w * num3;
+
+            float x = (1f - (num5 + num6)) * point.x + (num7 - num12) * point.y + (num8 + num11) * point.z;
+            float y = (num7 + num12) * point.x + (1f - (num4 + num6)) * point.y + (num9 - num10) * point.z;
+            float z = (num8 - num11) * point.x + (num9 + num10) * point.y + (1f - (num4 + num5)) * point.z;
+
+            return new AngleSnapshot(x, y, z);
+        }
+
+        public static Quaternion EulerToQuaternion(AngleSnapshot eulerAngles)
+        {
+            return EulerToQuaternion(eulerAngles.x, eulerAngles.y, eulerAngles.x);
+        }
+
+        public static Quaternion EulerToQuaternion(float pitch, float yaw, float roll)
+        {
+            //Calculate the quaternion components
+            float cy = MathF.Cos(yaw * 0.5f);
+            float sy = MathF.Sin(yaw * 0.5f);
+
+            float cp = MathF.Cos(pitch * 0.5f);
+            float sp = MathF.Sin(pitch * 0.5f);
+
+            float cr = MathF.Cos(roll * 0.5f);
+            float sr = MathF.Sin(roll * 0.5f);
+
+            float w = cr * cp * cy + sr * sp * sy;
+            float x = sr * cp * cy - cr * sp * sy;
+            float y = cr * sp * cy + sr * cp * sy;
+            float z = cr * cp * sy - sr * sp * cy;
+
+            return new Quaternion(x, y, z, w);
+        }
+
+        internal void Reset()
+        {
+            x = 0f;
+            y = 0f;
+            z = 0f;
+            w = 0f;
+        }
+    }
+
     internal struct AngleSnapshot
     {
         internal float x;
@@ -77,6 +195,11 @@ namespace TBAntiCheat.Detections.Modules
             return direction.Normalize();
         }
 
+        public static AngleSnapshot operator +(AngleSnapshot a, AngleSnapshot b)
+        {
+            return new AngleSnapshot(a.x + b.x, a.y + b.y, a.z + b.z);
+        }
+
         public static AngleSnapshot operator -(AngleSnapshot a, AngleSnapshot b)
         {
             return new AngleSnapshot(a.x - b.x, a.y - b.y, a.z - b.z);
@@ -100,9 +223,9 @@ namespace TBAntiCheat.Detections.Modules
 
         internal void Reset()
         {
-            x = 0;
-            y = 0;
-            z = 0;
+            x = 0f;
+            y = 0f;
+            z = 0f;
         }
 
         public override readonly string ToString()
@@ -138,6 +261,16 @@ namespace TBAntiCheat.Detections.Modules
     {
         private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)
 
+        private readonly AngleSnapshot originOffsetHead = new AngleSnapshot(0f, 64f, 0f);
+        private readonly AngleSnapshot originOffsetChest = new AngleSnapshot(0f, 48f, 0f);
+        private readonly AngleSnapshot originOffsetStomach = new AngleSnapshot(0f, 32f, 0f);
+
+        private readonly AngleSnapshot originOffsetLeftArm = new AngleSnapshot(-24f, 32f, 0f);
+        private readonly AngleSnapshot originOffsetRightArm = new AngleSnapshot(24f, 32f, 0f);
+
+        private readonly AngleSnapshot originOffsetLeftLeg = new AngleSnapshot(-24f, 0f, 0f);
+        private readonly AngleSnapshot originOffsetRightLeg = new AngleSnapshot(24f, 0f, 0f);
+
         private readonly BaseConfig<AimbotSaveData> config;
         private readonly PlayerAimbotData[] eyeAngleHistory;
 
@@ -166,20 +299,35 @@ namespace TBAntiCheat.Detections.Modules
             };
         }
 
-        internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter)
+        internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)
         {
             //NOTE: To increase the validity of this in the future
             //We probably need to account for spread too, how though? I have no idea as of now but we'll figure it out like always
 
-            AngleSnapshot origin = new (shooter.Pawn.AbsOrigin);
-            AngleSnapshot target = new (victim.Pawn.AbsOrigin);
+            Quaternion originAbsPos = new Quaternion(shooter.Pawn.AbsOrigin);
+            AngleSnapshot originHead = originAbsPos * originOffsetHead;
 
-            AngleSnapshot shotEyeAngles = AngleSnapshot.Direction(origin, target);
+            AngleSnapshot targetAbs = new AngleSnapshot(victim.Pawn.AbsOrigin);
+            Quaternion targetAbsQuat = new Quaternion(targetAbs);
+
+            AngleSnapshot targetPos = hitgroup switch
+            {
+                HitGroup_t.HITGROUP_HEAD => targetAbsQuat * originOffsetHead,
+                HitGroup_t.HITGROUP_CHEST => targetAbsQuat * originOffsetStomach,
+                HitGroup_t.HITGROUP_STOMACH => targetAbsQuat * originOffsetChest,
+                HitGroup_t.HITGROUP_LEFTARM => targetAbsQuat * originOffsetLeftArm,
+                HitGroup_t.HITGROUP_RIGHTARM => targetAbsQuat * originOffsetRightArm,
+                HitGroup_t.HITGROUP_LEFTLEG => targetAbsQuat * originOffsetLeftLeg,
+                HitGroup_t.HITGROUP_RIGHTLEG => targetAbsQuat * originOffsetRightLeg,
+                _ => targetAbs,
+            };
+
+            AngleSnapshot shotEyeAngles = AngleSnapshot.Direction(originHead, targetPos);
 
             PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
             aimbotData.eyeAngleHistory[aimbotData.historyIndex] = shotEyeAngles;
 
-            Server.PrintToChatAll($"Hurt: {shooter.Controller.PlayerName} -> {shotEyeAngles}");
+            Server.PrintToChatAll($"Hurt: {shooter.Controller.PlayerName} -> {shotEyeAngles} ({hitgroup})");
         }
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)

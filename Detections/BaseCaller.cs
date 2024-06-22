@@ -1,4 +1,5 @@
-﻿using TBAntiCheat.Core;
+﻿using CounterStrikeSharp.API.Core;
+using TBAntiCheat.Core;
 
 namespace TBAntiCheat.Detections
 {
@@ -49,13 +50,13 @@ namespace TBAntiCheat.Detections
             }
         }
 
-        internal static void OnPlayerHurt(PlayerData victim, PlayerData shooter)
+        internal static void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)
         {
             foreach (BaseDetection detection in Globals.Detections)
             {
                 try
                 {
-                    detection.OnPlayerHurt(victim, shooter);
+                    detection.OnPlayerHurt(victim, shooter, hitgroup);
                 }
                 catch (Exception e)
                 {

@@ -1,4 +1,5 @@
-﻿using TBAntiCheat.Core;
+﻿using CounterStrikeSharp.API.Core;
+using TBAntiCheat.Core;
 
 namespace TBAntiCheat.Detections
 {
@@ -34,7 +35,7 @@ namespace TBAntiCheat.Detections
         internal virtual void OnPlayerLeave(PlayerData player) { }
 
         internal virtual void OnPlayerJump(PlayerData player) { }
-        internal virtual void OnPlayerHurt(PlayerData victim, PlayerData shooter) { }
+        internal virtual void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup) { }
         internal virtual void OnPlayerDead(PlayerData victim, PlayerData shooter) { }
         internal virtual void OnPlayerShoot(PlayerData player) { }
         internal virtual void OnPlayerTick(PlayerData player) { }

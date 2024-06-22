@@ -136,7 +136,7 @@ namespace TBAntiCheat.Handlers
             PlayerData victim = Globals.Players[hurtEvent.Userid.Index];
             PlayerData shooter = Globals.Players[hurtEvent.Attacker.Index];
 
-            BaseCaller.OnPlayerHurt(victim, shooter);
+            BaseCaller.OnPlayerHurt(victim, shooter, (HitGroup_t)hurtEvent.Hitgroup);
 
             return HookResult.Continue;
         }

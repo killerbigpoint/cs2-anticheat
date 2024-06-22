@@ -28,6 +28,13 @@ namespace TBAntiCheat.Detections.Modules
             Reset();
         }
 
+        public AngleSnapshot(float x, float y, float z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
         public AngleSnapshot(Vector? vector)
         {
             if (vector == null)
@@ -62,6 +69,33 @@ namespace TBAntiCheat.Detections.Modules
 
             float distance = MathF.Sqrt(newX * newX + newY * newY + newZ * newZ);
             return distance;
+        }
+
+        public static AngleSnapshot Direction(AngleSnapshot origin, AngleSnapshot target)
+        {
+            AngleSnapshot direction = target - origin;
+            return direction.Normalize();
+        }
+
+        public static AngleSnapshot operator -(AngleSnapshot a, AngleSnapshot b)
+        {
+            return new AngleSnapshot(a.x - b.x, a.y - b.y, a.z - b.z);
+        }
+
+        public readonly float Length()
+        {
+            return MathF.Sqrt(x * x + y * y + z * z);
+        }
+
+        public readonly AngleSnapshot Normalize()
+        {
+            float length = Length();
+            if (length == 0)
+            {
+                return new AngleSnapshot(0, 0, 0); //Avoid division by zero
+            }
+
+            return new AngleSnapshot(x / length, y / length, z / length);
         }
 
         internal void Reset()
@@ -132,6 +166,22 @@ namespace TBAntiCheat.Detections.Modules
             };
         }
 
+        internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter)
+        {
+            //NOTE: To increase the validity of this in the future
+            //We probably need to account for spread too, how though? I have no idea as of now but we'll figure it out like always
+
+            AngleSnapshot origin = new (shooter.Pawn.AbsOrigin);
+            AngleSnapshot target = new (victim.Pawn.AbsOrigin);
+
+            AngleSnapshot shotEyeAngles = AngleSnapshot.Direction(origin, target);
+
+            PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
+            aimbotData.eyeAngleHistory[aimbotData.historyIndex] = shotEyeAngles;
+
+            Server.PrintToChatAll($"Hurt: {shooter.Controller.PlayerName} -> {shotEyeAngles}");
+        }
+
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
             if (config.Config.DetectionEnabled == false)
@@ -167,6 +217,8 @@ namespace TBAntiCheat.Detections.Modules
                 {
                     angleDiff = MathF.Abs(angleDiff - 360);
                 }
+
+                Server.PrintToChatAll($"{i}: {shooter.Controller.PlayerName} -> {angleDiff}");
 
                 if (angleDiff > maxAngle)
                 {

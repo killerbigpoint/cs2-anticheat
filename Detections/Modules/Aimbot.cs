@@ -78,27 +78,28 @@ namespace TBAntiCheat.Detections.Modules
 
         public static AngleSnapshot operator *(Quaternion rotation, AngleSnapshot point)
         {
-            float num = rotation.x * 2f;
-            float num2 = rotation.y * 2f;
-            float num3 = rotation.z * 2f;
+            float x = rotation.x * 2f;
+            float y = rotation.y * 2f;
+            float z = rotation.z * 2f;
 
-            float num4 = rotation.x * num;
-            float num5 = rotation.y * num2;
-            float num6 = rotation.z * num3;
+            float xx = rotation.x * x;
+            float yy = rotation.y * y;
+            float zz = rotation.z * z;
 
-            float num7 = rotation.x * num2;
-            float num8 = rotation.x * num3;
-            float num9 = rotation.y * num3;
+            float xy = rotation.x * y;
+            float xz = rotation.x * z;
+            float yz = rotation.y * z;
 
-            float num10 = rotation.w * num;
-            float num11 = rotation.w * num2;
-            float num12 = rotation.w * num3;
+            float wx = rotation.w * x;
+            float wy = rotation.w * y;
+            float wz = rotation.w * z;
 
-            float x = (1f - (num5 + num6)) * point.x + (num7 - num12) * point.y + (num8 + num11) * point.z;
-            float y = (num7 + num12) * point.x + (1f - (num4 + num6)) * point.y + (num9 - num10) * point.z;
-            float z = (num8 - num11) * point.x + (num9 + num10) * point.y + (1f - (num4 + num5)) * point.z;
+            AngleSnapshot result = new AngleSnapshot();
+            result.x = (1f - (yy + zz)) * point.x + (xy - wz) * point.y + (xz + wy) * point.z;
+            result.y = (xy + wz) * point.x + (1f - (xx + zz)) * point.y + (yz - wx) * point.z;
+            result.z = (xz - wy) * point.x + (yz + wx) * point.y + (1f - (xx + yy)) * point.z;
 
-            return new AngleSnapshot(x, y, z);
+            return result;
         }
 
         public static Quaternion EulerToQuaternion(AngleSnapshot eulerAngles)
@@ -301,9 +302,10 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)
         {
-            //NOTE: To increase the validity of this in the future
-            //We probably need to account for spread too, how though? I have no idea as of now but we'll figure it out like always
-
+            //You might be wondering, why the fuck are we converting it to Quaternion and then back to a Vector/AngleSnapshot?
+            //Well let me tell you, because I simply suck at math and CounterStrikeSharp don't provide any way to get a bone position
+            //So here we find the approximate offset from the abs origin of each bone via the use of some complicated math that I totally
+            //Didn't steal from Unity and some StackOverflow posts. But hey, it gives us exactly what we want for a "proper" angle
             Quaternion originAbsPos = new Quaternion(shooter.Pawn.AbsOrigin);
             AngleSnapshot originHead = originAbsPos * originOffsetHead;
 
@@ -323,6 +325,11 @@ namespace TBAntiCheat.Detections.Modules
             };
 
             AngleSnapshot shotEyeAngles = AngleSnapshot.Direction(originHead, targetPos);
+
+            //NOTE: To increase the validity of this in the future
+            //We probably need to account for spread too, how though? I have no idea as of now but we'll figure it out like always
+            //AngleSnapshot calculatedSpread = new AngleSnapshot();
+            //shotEyeAngles += calculatedSpread;
 
             PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
             aimbotData.eyeAngleHistory[aimbotData.historyIndex] = shotEyeAngles;

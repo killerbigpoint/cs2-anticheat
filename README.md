@@ -14,7 +14,11 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 - [ ] Bunnyhop (WIP)
 - [ ] No-Spread Detection (WIP)
 
+### Integration
+- [ ] IKS Admin System
+
 ## Installation
+- Download [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) if you haven't already and follow their install instructions
 - Download the latest release from [Releases](https://github.com/killerbigpoint/cs2-anticheat/releases)
 - Drag and drop the folder **TBAntiCheat** into your plugins folder which should be in inside of `game/csgo/addons/counterstrikesharp/plugins`
 
@@ -27,7 +31,11 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 | !tbac_enable     | <1 / 0>                          | Enables/Disables the anticheat on a global level                     | @css/admin  |
 
 ## Contributing
-### TODO
+If you know how to code and want to contribute to the project then follow the instructions down below
+- Download the correct version of [DotNet SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0). As of now we use .NET 8
+- Fork the project and open it up in Visual Studio, no dependencies needed as they are all in NuGet
+- Make your appropiate change, test it on a server and create a pull request
+- Please don't create huge pull requests if you can. Rather create smaller ones and more of them to make it more readable.
 
 ## Credits
 [Original Creators Of SMAC](https://forums.alliedmods.net/forumdisplay.php?f=133) - AlliedModders<br />

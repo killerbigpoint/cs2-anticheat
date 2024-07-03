@@ -334,7 +334,7 @@ namespace TBAntiCheat.Detections.Modules
             PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
             aimbotData.eyeAngleHistory[aimbotData.historyIndex] = shotEyeAngles;
 
-            Server.PrintToChatAll($"Hurt: {shooter.Controller.PlayerName} -> {shotEyeAngles} ({hitgroup})");
+            //Server.PrintToChatAll($"Hurt: {shooter.Controller.PlayerName} -> {shotEyeAngles} ({hitgroup})");
         }
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
@@ -373,7 +373,7 @@ namespace TBAntiCheat.Detections.Modules
                     angleDiff = MathF.Abs(angleDiff - 360);
                 }
 
-                Server.PrintToChatAll($"{i}: {shooter.Controller.PlayerName} -> {angleDiff}");
+                //Server.PrintToChatAll($"{i}: {shooter.Controller.PlayerName} -> {angleDiff}");
 
                 if (angleDiff > maxAngle)
                 {

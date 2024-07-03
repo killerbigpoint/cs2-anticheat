@@ -64,7 +64,7 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJump(PlayerData player)
         {
-            Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped Goofy Ass Mf");
+            //Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped Goofy Ass Mf");
         }
 
         internal override void OnPlayerTick(PlayerData player)
@@ -74,7 +74,7 @@ namespace TBAntiCheat.Detections.Modules
             PlayerButtons buttons = player.Controller.Buttons;
             if (buttons.HasFlag(PlayerButtons.Jump) == true)
             {
-                Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
+                //Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
             }
         }
 

@@ -33,7 +33,7 @@ namespace TBAntiCheat.Detections.Modules
 
         // ----- Commands ----- \\
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnEnableCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)
@@ -51,7 +51,7 @@ namespace TBAntiCheat.Detections.Modules
             config.Save();
         }
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnActionCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)

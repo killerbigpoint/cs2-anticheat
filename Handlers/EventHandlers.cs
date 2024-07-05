@@ -60,14 +60,6 @@ namespace TBAntiCheat.Handlers
                 Index = (int)controller.Index
             };
 
-            if (BanHandler.IsPlayerBanned(player) == true)
-            {
-                string reason = BanHandler.GetBanReason(player);
-                PlayerUtils.KickPlayer(player, reason);
-
-                return;
-            }
-
             Globals.Players.Add(controller.Index, player);
             BaseCaller.OnPlayerJoin(player);
         }

@@ -21,13 +21,12 @@ namespace TBAntiCheat.Core
 
             Globals.PreInit(this);
 
-            BanHandler.InitializeBanHandler();
             CommandHandler.InitializeCommandHandler(this);
 
             EventListeners.InitializeListeners(this);
             EventHandlers.InitializeHandlers(this, hotReload);
 
-            Globals.Initialize(hotReload);
+            //Globals.Initialize(hotReload); <-- This fixed the crash
 
             Log($"[TBAC] Loaded (v{ModuleVersion})");
         }

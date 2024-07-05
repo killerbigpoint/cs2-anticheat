@@ -4,7 +4,7 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 ## Features / Roadmap
 ### Core
 - [x] Config
-- [ ] Ban System
+- [x] Ban System
 
 ### Modules
 - [x] Aimbot Detection
@@ -16,6 +16,7 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 
 ### Integration
 - [ ] IKS Admin System
+- [x] Basic SimpleAdmin support
 
 ## Installation
 - Download [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) if you haven't already and follow their install instructions

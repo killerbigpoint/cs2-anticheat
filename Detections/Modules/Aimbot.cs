@@ -5,13 +5,14 @@ using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
+using static TBAntiCheat.Core.DetectionHandler;
 
 namespace TBAntiCheat.Detections.Modules
 {
     public class AimbotSaveData
     {
         public bool DetectionEnabled { get; set; } = true;
-        public ActionType DetectionAction { get; set; } = ActionType.Kick;
+        public ActionType DetectionAction { get; set; } = ActionType.Ban;
 
         public float MaxAimbotAngle { get; set; } = 30f;
         public int MaxDetectionsBeforeAction { get; set; } = 2;
@@ -428,13 +429,18 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            string reason = $"Aimbot -> {angleDiff}";
+            //notify server when detected
+            var msg = "{Lime}[TBAC] {Default}Cheating detected..";
+            Server.PrintToChatAll(Chat.ColoredMessage(msg));
+
+            //Made reason simpleadmin friendly
+            string reason = $"Aimbot";
             OnPlayerDetected(player, reason);
         }
 
         // ----- Commands ----- \\
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnEnableCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)
@@ -452,7 +458,7 @@ namespace TBAntiCheat.Detections.Modules
             config.Save();
         }
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnActionCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)
@@ -476,7 +482,7 @@ namespace TBAntiCheat.Detections.Modules
             config.Save();
         }
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnAngleCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)
@@ -494,7 +500,7 @@ namespace TBAntiCheat.Detections.Modules
             config.Save();
         }
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnDetectionsCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)

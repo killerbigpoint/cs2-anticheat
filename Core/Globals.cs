@@ -15,7 +15,7 @@ namespace TBAntiCheat.Core
 
     internal static class Globals
     {
-        private static bool InitializedOnce = false;
+        private static bool initializedOnce = false;
 
         private static ACCore? pluginCore = null;
 
@@ -27,9 +27,9 @@ namespace TBAntiCheat.Core
             pluginCore = core;
         }
 
-        internal static void Initialize(bool hotReload)
+        internal static void Initialize(bool forceReinitialize)
         {
-            if (InitializedOnce == true && hotReload == false)
+            if (initializedOnce == true && forceReinitialize == false)
             {
                 return;
             }
@@ -45,7 +45,7 @@ namespace TBAntiCheat.Core
                 new UntrustedAngles()
             ];
 
-            InitializedOnce = true;
+            initializedOnce = true;
         }
 
         internal static string GetModuleDirectory()

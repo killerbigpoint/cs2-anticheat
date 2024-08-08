@@ -40,7 +40,6 @@ namespace TBAntiCheat.Core
                 new Aimbot(),
                 new Backtrack(),
                 new BunnyHop(),
-                new NoSpread(),
                 new RapidFire(),
                 new UntrustedAngles()
             ];

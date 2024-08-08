@@ -21,7 +21,7 @@ namespace TBAntiCheat.Handlers
         {
             BaseCaller.OnGameTick();
 
-            foreach(KeyValuePair<uint, PlayerData> player in Globals.Players)
+            foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
             {
                 BaseCaller.OnPlayerTick(player.Value);
             }

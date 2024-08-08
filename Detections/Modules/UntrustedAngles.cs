@@ -1,16 +1,19 @@
-﻿using CounterStrikeSharp.API.Core;
+﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static TBAntiCheat.Core.DetectionHandler;
 
 namespace TBAntiCheat.Detections.Modules
 {
     public class UntrustedAnglesSaveData
     {
         public bool DetectionEnabled { get; set; } = true;
-        public ActionType DetectionAction { get; set; } = ActionType.Kick;
+        public ActionType DetectionAction { get; set; } = ActionType.Ban;
     }
 
     /*
@@ -46,21 +49,39 @@ namespace TBAntiCheat.Detections.Modules
 
             if (pitch < -89f || pitch > 89f)
             {
-                string reason = $"Untrusted EyeAngles Pitch -> {pitch}";
+                ACCore.Log($"[TBAC] Banned player {player.Controller.PlayerName} for: Untrusted EyeAngles Pitch -> {pitch}");
+                //notify server when detected 
+                var msg = "{Lime}[TBAC] {Default}Cheating detected..";
+                Server.PrintToChatAll(Chat.ColoredMessage(msg));
+
+                //Made reason simpleadmin friendly
+                string reason = $"Untrusted_Angles";
                 OnPlayerDetected(player, reason);
 
                 return;
             }
             else if (yaw < -180f || yaw > 180f)
             {
-                string reason = $"Untrusted EyeAngles Yaw -> {yaw}";
+                ACCore.Log($"[TBAC] Banned player {player.Controller.PlayerName} for: Untrusted EyeAngles Yaw -> {yaw}");
+                //notify server when detected
+                var msg = "{Lime}[TBAC] {Default}Cheating detected..";
+                Server.PrintToChatAll(Chat.ColoredMessage(msg));
+
+                //Made reason simpleadmin friendly
+                string reason = $"Untrusted_Angles";
                 OnPlayerDetected(player, reason);
 
                 return;
             }
             else if (roll < -50f || roll > 50f)
             {
-                string reason = $"Untrusted EyeAngles Roll -> {roll}";
+                ACCore.Log($"[TBAC] Banned player {player.Controller.PlayerName} for: Untrusted EyeAngles Roll -> {roll}");
+                //notify server when detected
+                var msg = "{Lime}[TBAC] {Default}Cheating detected..";
+                Server.PrintToChatAll(Chat.ColoredMessage(msg));
+
+                //Made reason simpleadmin friendly
+                string reason = $"Untrusted_Angles";
                 OnPlayerDetected(player, reason);
 
                 return;
@@ -69,7 +90,7 @@ namespace TBAntiCheat.Detections.Modules
 
         // ----- Commands ----- \\
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnEnableCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)
@@ -87,7 +108,7 @@ namespace TBAntiCheat.Detections.Modules
             config.Save();
         }
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnActionCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)

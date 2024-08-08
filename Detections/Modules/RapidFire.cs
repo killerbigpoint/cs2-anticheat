@@ -4,6 +4,7 @@ using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
+using static TBAntiCheat.Core.DetectionHandler;
 
 namespace TBAntiCheat.Detections.Modules
 {
@@ -106,7 +107,12 @@ namespace TBAntiCheat.Detections.Modules
 
             if (data.rapidDetections >= config.Config.MaxDetectionsBeforeAction)
             {
-                string reason = $"RapidFire -> TickDiff: {tickDiff} | NextAttackDiff: {nextAttack}";
+                //notify server when detected
+                var msg = "{Lime}[TBAC] {Default}Cheating detected..";
+                Server.PrintToChatAll(Chat.ColoredMessage(msg));
+
+                //Made reason simpleadmin friendly
+                string reason = $"RapidFire";
                 OnPlayerDetected(player, reason);
 
                 data.rapidDetections = 0;
@@ -117,7 +123,7 @@ namespace TBAntiCheat.Detections.Modules
 
         // ----- Commands ----- \\
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnEnableCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)
@@ -135,7 +141,7 @@ namespace TBAntiCheat.Detections.Modules
             config.Save();
         }
 
-        [RequiresPermissions("@css/admin")]
+        [RequiresPermissions("@css/root")]
         private void OnActionCommand(CCSPlayerController? player, CommandInfo command)
         {
             if (command.ArgCount != 2)

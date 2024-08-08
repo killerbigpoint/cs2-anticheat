@@ -9,10 +9,8 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 ### Modules
 - [x] Aimbot Detection
 - [x] Untrusted Angles
-- [ ] Backtrack
 - [x] Rapid-Fire
 - [ ] Bunnyhop (WIP)
-- [ ] No-Spread Detection (WIP)
 
 ### Integration
 - [ ] IKS Admin System
@@ -38,6 +36,6 @@ If you know how to code and want to contribute to the project then follow the in
 - Please don't create huge pull requests if you can. Rather create smaller ones and more of them to make it more readable.
 
 ## Credits
-[Original Creators Of SMAC](https://forums.alliedmods.net/forumdisplay.php?f=133) - AlliedModders<br />
-[Fork Maintainer Of SMAC](https://github.com/Silenci0/SMAC) - Silenci0<br />
+[Original Creators of SMAC](https://forums.alliedmods.net/forumdisplay.php?f=133) - AlliedModders<br />
+[Fork of SMAC](https://github.com/Silenci0/SMAC) - Silenci0<br />
 [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) - Michael Wilson<br />

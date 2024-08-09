@@ -14,6 +14,7 @@ Anticheat plugin for Counter-Strike 2 based on CounterStrikeSharp. It is heavily
 
 ### Integration
 - [ ] IKS Admin System
+- [ ] SimpleAdmin
 
 ## Installation
 - Download [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp) if you haven't already and follow their install instructions

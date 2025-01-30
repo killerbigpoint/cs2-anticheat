@@ -8,7 +8,7 @@ namespace TBAntiCheat.Handlers
 {
     internal static class EventHandlers
     {
-        internal static void InitializeHandlers(BasePlugin plugin, bool hotReload)
+        internal static void Initialize(BasePlugin plugin, bool hotReload)
         {
             plugin.RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull);
             plugin.RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
@@ -17,6 +17,7 @@ namespace TBAntiCheat.Handlers
             plugin.RegisterEventHandler<EventPlayerHurt>(OnPlayerHurt);
             plugin.RegisterEventHandler<EventPlayerDeath>(OnPlayerDeath);
 
+            plugin.RegisterEventHandler<EventWeaponFire>(OnWeaponFire);
             plugin.RegisterEventHandler<EventWeaponFire>(OnWeaponFire);
 
             plugin.RegisterEventHandler<EventRoundStart>(OnRoundStart);
@@ -29,6 +30,8 @@ namespace TBAntiCheat.Handlers
                     JoinPlayer(controller);
                 }
             }
+
+            ACCore.Log($"[TBAC] EventHandlers Initialized");
         }
 
         private static HookResult OnPlayerConnectFull(EventPlayerConnectFull connectEvent, GameEventInfo _)

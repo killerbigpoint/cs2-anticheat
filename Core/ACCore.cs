@@ -17,15 +17,19 @@ namespace TBAntiCheat.Core
 
         public override void Load(bool hotReload)
         {
+            Log($"[TBAC] Loading (hotReload: {hotReload})");
+
             logger = Logger;
 
             Globals.PreInit(this);
 
-            BanHandler.InitializeBanHandler();
-            CommandHandler.InitializeCommandHandler(this);
+            BanHandler.Initialize();
+            CommandHandler.Initialize(this);
 
-            EventListeners.InitializeListeners(this);
-            EventHandlers.InitializeHandlers(this, hotReload);
+            EventListeners.Initialize(this);
+            EventHandlers.Initialize(this, hotReload);
+
+            VirtualFuncs.Initialize();
 
             if (hotReload == true)
             {

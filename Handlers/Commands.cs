@@ -1,5 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Commands;
+using TBAntiCheat.Core;
 
 namespace TBAntiCheat.Handlers
 {
@@ -7,9 +8,11 @@ namespace TBAntiCheat.Handlers
     {
         private static BasePlugin? plugin;
 
-        internal static void InitializeCommandHandler(BasePlugin basePlugin)
+        internal static void Initialize(BasePlugin basePlugin)
         {
             plugin = basePlugin;
+
+            ACCore.Log($"[TBAC] CommandHandler Initialized");
         }
 
         internal static bool RegisterCommand(string command, string description, CommandInfo.CommandCallback handler)

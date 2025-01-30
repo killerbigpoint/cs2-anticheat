@@ -18,7 +18,7 @@ namespace TBAntiCheat.Core
     {
         private static BaseConfig<BanHandlerSaveData>? config;
 
-        internal static void InitializeBanHandler()
+        internal static void Initialize()
         {
             config = new BaseConfig<BanHandlerSaveData>("BannedPlayers");
         }

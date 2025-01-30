@@ -25,6 +25,8 @@ namespace TBAntiCheat.Core
         internal static void PreInit(ACCore core)
         {
             pluginCore = core;
+
+            ACCore.Log($"[TBAC] Globals Pre-Init");
         }
 
         internal static void Initialize(bool forceReinitialize)
@@ -34,7 +36,7 @@ namespace TBAntiCheat.Core
                 return;
             }
 
-            ACCore.Log($"[TBAC] Globals Initialized -> {forceReinitialize}");
+            ACCore.Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
             Players = new Dictionary<uint, PlayerData>(Server.MaxPlayers);
             Detections =
@@ -47,6 +49,8 @@ namespace TBAntiCheat.Core
             ];
 
             initializedOnce = true;
+
+            ACCore.Log($"[TBAC] Globals Initialized");
         }
 
         internal static string GetModuleDirectory()

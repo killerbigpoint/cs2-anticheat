@@ -34,11 +34,13 @@ namespace TBAntiCheat.Core
                 return;
             }
 
+            ACCore.Log($"[TBAC] Globals Initialized -> {forceReinitialize}");
+
             Players = new Dictionary<uint, PlayerData>(Server.MaxPlayers);
             Detections =
             [
                 new Aimbot(),
-                new Backtrack(),
+                //new Backtrack(),
                 new BunnyHop(),
                 new RapidFire(),
                 new UntrustedAngles()

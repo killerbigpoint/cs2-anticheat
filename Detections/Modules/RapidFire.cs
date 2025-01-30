@@ -42,6 +42,8 @@ namespace TBAntiCheat.Detections.Modules
 
             CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates RapidFire detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_rapidfire_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
+
+            ACCore.Log($"[TBAC] RapidFire Initialized");
         }
 
         internal override void OnPlayerJoin(PlayerData player)

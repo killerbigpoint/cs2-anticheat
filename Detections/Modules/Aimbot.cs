@@ -284,6 +284,8 @@ namespace TBAntiCheat.Detections.Modules
             CommandHandler.RegisterCommand("tbac_aimbot_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_angle", "Max angle in a single tick before detection", OnAngleCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_detections", "Maximum detections before an action should be taken", OnDetectionsCommand);
+
+            ACCore.Log($"[TBAC] Aimbot Initialized");
         }
 
         internal override string Name => "Aimbot";
@@ -298,6 +300,13 @@ namespace TBAntiCheat.Detections.Modules
 
                 detections = 0
             };
+
+            ACCore.Log($"[TBAC] OnPlayerJoin -> {player.Index} | {player.Controller.PlayerName}");
+        }
+
+        internal override void OnPlayerLeave(PlayerData player)
+        {
+            ACCore.Log($"[TBAC] OnPlayerLeave -> {player.Index} | {player.Controller.PlayerName}");
         }
 
         /*internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)

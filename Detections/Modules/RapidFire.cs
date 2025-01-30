@@ -76,6 +76,12 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
+            CWeaponBaseItem weaponItem = (CWeaponBaseItem)weaponBase;
+            if (weaponItem != null)
+            {
+                return; // We don't want to check items such as HealthShot so we skip here
+            }
+
             CCSWeaponBaseGun weapon = new CCSWeaponBaseGun(weaponBase.Handle);
 
             int nextAttack;

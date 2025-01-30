@@ -22,6 +22,10 @@ namespace TBAntiCheat.Core
             logger = Logger;
 
             Globals.PreInit(this);
+            if (hotReload == true)
+            {
+                Globals.Initialize(hotReload);
+            }
 
             BanHandler.Initialize();
             CommandHandler.Initialize(this);
@@ -30,11 +34,6 @@ namespace TBAntiCheat.Core
             EventHandlers.Initialize(this, hotReload);
 
             VirtualFuncs.Initialize();
-
-            if (hotReload == true)
-            {
-                Globals.Initialize(hotReload);
-            }
 
             Log($"[TBAC] Loaded (v{ModuleVersion})");
         }

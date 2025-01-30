@@ -293,6 +293,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
+            if (player.Controller.IsBot == true)
+            {
+                return;
+            }
+
             eyeAngleHistory[player.Index] = new PlayerAimbotData()
             {
                 eyeAngleHistory = new AngleSnapshot[aimbotMaxHistory],
@@ -306,6 +311,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerLeave(PlayerData player)
         {
+            if (player.Controller.IsBot == true)
+            {
+                return;
+            }
+
             ACCore.Log($"[TBAC] OnPlayerLeave -> {player.Index} | {player.Controller.PlayerName}");
         }
 
@@ -411,6 +421,11 @@ namespace TBAntiCheat.Detections.Modules
         internal override void OnPlayerTick(PlayerData player)
         {
             if (config.Config.DetectionEnabled == false)
+            {
+                return;
+            }
+
+            if (player.Controller.IsBot == true)
             {
                 return;
             }

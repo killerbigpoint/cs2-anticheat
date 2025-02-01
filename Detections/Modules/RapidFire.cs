@@ -64,6 +64,11 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
+            if (player.Controller.IsBot == true)
+            {
+                return;
+            }
+
             CPlayer_WeaponServices? weaponServices = player.Pawn.WeaponServices;
             if (weaponServices == null)
             {
@@ -76,20 +81,18 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            CWeaponBaseItem weaponItem = (CWeaponBaseItem)weaponBase;
-            if (weaponItem != null)
-            {
-                return; // We don't want to check items such as HealthShot so we skip here
-            }
-
             CCSWeaponBaseGun weapon = new CCSWeaponBaseGun(weaponBase.Handle);
+            if (weaponBase.DesignerName == "weapon_healthshot")
+            {
+                return;
+            }
 
             int nextAttack;
             switch (weapon.WeaponMode)
             {
                 case CSWeaponMode.Primary_Mode: nextAttack = weapon.NextPrimaryAttackTick; break;
                 case CSWeaponMode.Secondary_Mode: nextAttack = weapon.NextSecondaryAttackTick; break;
-                default: return;
+                default: ACCore.Log($"[TBAC] Unsupported WeaponMode: {(int)weapon.WeaponMode}"); return;
             }
 
             int serverTickCount = Server.TickCount;
@@ -105,16 +108,22 @@ namespace TBAntiCheat.Detections.Modules
             int nextAttackDiff = serverTickCount - nextAttack;
             if (tickDiff == 1)
             {
+                string detection = $"RapidFire Detected -> ServerTickCount: {serverTickCount} | TickDiff: {tickDiff} | NextAttackDiff: {nextAttackDiff} | NextAttack: {nextAttack} | LastBulletShotTick: {data.lastBulletShotTick}";
+                ACCore.Log($"[TBAC] {detection}");
+
                 data.rapidDetections++;
             }
             else if (nextAttackDiff > 32)
             {
+                string detection = $"RapidFire Detected -> ServerTickCount: {serverTickCount} | TickDiff: {tickDiff} | NextAttackDiff: {nextAttackDiff} | NextAttack: {nextAttack} | LastBulletShotTick: {data.lastBulletShotTick}";
+                ACCore.Log($"[TBAC] {detection}");
+
                 data.rapidDetections++;
             }
 
             if (data.rapidDetections >= config.Config.MaxDetectionsBeforeAction)
             {
-                string reason = $"RapidFire -> TickDiff: {tickDiff} | NextAttackDiff: {nextAttack}";
+                string reason = $"RapidFire -> ServerTickCount: {serverTickCount} | TickDiff: {tickDiff} | NextAttackDiff: {nextAttackDiff} | NextAttack: {nextAttack} | LastBulletShotTick: {data.lastBulletShotTick}";
                 OnPlayerDetected(player, reason);
 
                 data.rapidDetections = 0;

@@ -17,227 +17,9 @@ namespace TBAntiCheat.Detections.Modules
         public int MaxDetectionsBeforeAction { get; set; } = 2;
     }
 
-    internal struct Quaternion
-    {
-        internal float x;
-        internal float y;
-        internal float z;
-        internal float w;
-
-        public Quaternion()
-        {
-            Reset();
-        }
-
-        public Quaternion(float x, float y, float z, float w)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.w = w;
-        }
-
-        public Quaternion(AngleSnapshot euler)
-        {
-            Quaternion quat = EulerToQuaternion(euler.x, euler.y, euler.z);
-            x = quat.x;
-            y = quat.y;
-            z = quat.z;
-            w = quat.w;
-        }
-
-        public Quaternion(Vector? vector)
-        {
-            if (vector == null)
-            {
-                Reset();
-                return;
-            }
-
-            Quaternion quat = EulerToQuaternion(vector.X, vector.Y, vector.Z);
-            x = quat.x;
-            y = quat.y;
-            z = quat.z;
-            w = quat.w;
-        }
-
-        public Quaternion(QAngle? angle)
-        {
-            if (angle == null)
-            {
-                Reset();
-                return;
-            }
-
-            Quaternion quat = EulerToQuaternion(angle.X, angle.Y, angle.Z);
-            x = quat.x;
-            y = quat.y;
-            z = quat.z;
-            w = quat.w;
-        }
-
-        public static AngleSnapshot operator *(Quaternion rotation, AngleSnapshot point)
-        {
-            float x = rotation.x * 2f;
-            float y = rotation.y * 2f;
-            float z = rotation.z * 2f;
-
-            float xx = rotation.x * x;
-            float yy = rotation.y * y;
-            float zz = rotation.z * z;
-
-            float xy = rotation.x * y;
-            float xz = rotation.x * z;
-            float yz = rotation.y * z;
-
-            float wx = rotation.w * x;
-            float wy = rotation.w * y;
-            float wz = rotation.w * z;
-
-            AngleSnapshot result = new AngleSnapshot();
-            result.x = (1f - (yy + zz)) * point.x + (xy - wz) * point.y + (xz + wy) * point.z;
-            result.y = (xy + wz) * point.x + (1f - (xx + zz)) * point.y + (yz - wx) * point.z;
-            result.z = (xz - wy) * point.x + (yz + wx) * point.y + (1f - (xx + yy)) * point.z;
-
-            return result;
-        }
-
-        public static Quaternion EulerToQuaternion(AngleSnapshot eulerAngles)
-        {
-            return EulerToQuaternion(eulerAngles.x, eulerAngles.y, eulerAngles.x);
-        }
-
-        public static Quaternion EulerToQuaternion(float pitch, float yaw, float roll)
-        {
-            //Calculate the quaternion components
-            float cy = MathF.Cos(yaw * 0.5f);
-            float sy = MathF.Sin(yaw * 0.5f);
-
-            float cp = MathF.Cos(pitch * 0.5f);
-            float sp = MathF.Sin(pitch * 0.5f);
-
-            float cr = MathF.Cos(roll * 0.5f);
-            float sr = MathF.Sin(roll * 0.5f);
-
-            float w = cr * cp * cy + sr * sp * sy;
-            float x = sr * cp * cy - cr * sp * sy;
-            float y = cr * sp * cy + sr * cp * sy;
-            float z = cr * cp * sy - sr * sp * cy;
-
-            return new Quaternion(x, y, z, w);
-        }
-
-        internal void Reset()
-        {
-            x = 0f;
-            y = 0f;
-            z = 0f;
-            w = 0f;
-        }
-    }
-
-    internal struct AngleSnapshot
-    {
-        internal float x;
-        internal float y;
-        internal float z;
-
-        public AngleSnapshot()
-        {
-            Reset();
-        }
-
-        public AngleSnapshot(float x, float y, float z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public AngleSnapshot(Vector? vector)
-        {
-            if (vector == null)
-            {
-                Reset();
-                return;
-            }
-
-            x = vector.X;
-            y = vector.Y;
-            z = vector.Z;
-        }
-
-        public AngleSnapshot(QAngle? angle)
-        {
-            if (angle == null)
-            {
-                Reset();
-                return;
-            }
-
-            x = angle.X;
-            y = angle.Y;
-            z = angle.Z;
-        }
-
-        public static float Distance(AngleSnapshot a, AngleSnapshot b)
-        {
-            float newX = a.x - b.x;
-            float newY = a.y - b.y;
-            float newZ = a.z - b.z;
-
-            float distance = MathF.Sqrt(newX * newX + newY * newY + newZ * newZ);
-            return distance;
-        }
-
-        public static AngleSnapshot Direction(AngleSnapshot origin, AngleSnapshot target)
-        {
-            AngleSnapshot direction = target - origin;
-            return direction.Normalize();
-        }
-
-        public static AngleSnapshot operator +(AngleSnapshot a, AngleSnapshot b)
-        {
-            return new AngleSnapshot(a.x + b.x, a.y + b.y, a.z + b.z);
-        }
-
-        public static AngleSnapshot operator -(AngleSnapshot a, AngleSnapshot b)
-        {
-            return new AngleSnapshot(a.x - b.x, a.y - b.y, a.z - b.z);
-        }
-
-        public readonly float Length()
-        {
-            return MathF.Sqrt(x * x + y * y + z * z);
-        }
-
-        public readonly AngleSnapshot Normalize()
-        {
-            float length = Length();
-            if (length == 0)
-            {
-                return new AngleSnapshot(0, 0, 0); //Avoid division by zero
-            }
-
-            return new AngleSnapshot(x / length, y / length, z / length);
-        }
-
-        internal void Reset()
-        {
-            x = 0f;
-            y = 0f;
-            z = 0f;
-        }
-
-        public override readonly string ToString()
-        {
-            return $"{x:n2} {y:n2} {z:n2}";
-        }
-    }
-
     internal class PlayerAimbotData
     {
-        internal required AngleSnapshot[] eyeAngleHistory;
+        internal required QAngle[] eyeAngleHistory;
         internal required int historyIndex;
 
         internal required int detections;
@@ -245,11 +27,6 @@ namespace TBAntiCheat.Detections.Modules
         internal void Reset()
         {
             historyIndex = 0;
-
-            for (int i = 0; i < eyeAngleHistory.Length; i++)
-            {
-                eyeAngleHistory[i].Reset();
-            }
         }
     }
 
@@ -261,16 +38,6 @@ namespace TBAntiCheat.Detections.Modules
     internal class Aimbot : BaseDetection
     {
         private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)
-
-        private readonly AngleSnapshot originOffsetHead = new AngleSnapshot(0f, 64f, 0f);
-        private readonly AngleSnapshot originOffsetChest = new AngleSnapshot(0f, 48f, 0f);
-        private readonly AngleSnapshot originOffsetStomach = new AngleSnapshot(0f, 32f, 0f);
-
-        private readonly AngleSnapshot originOffsetLeftArm = new AngleSnapshot(-24f, 32f, 0f);
-        private readonly AngleSnapshot originOffsetRightArm = new AngleSnapshot(24f, 32f, 0f);
-
-        private readonly AngleSnapshot originOffsetLeftLeg = new AngleSnapshot(-24f, 0f, 0f);
-        private readonly AngleSnapshot originOffsetRightLeg = new AngleSnapshot(24f, 0f, 0f);
 
         private readonly BaseConfig<AimbotSaveData> config;
         private readonly PlayerAimbotData[] eyeAngleHistory;
@@ -300,13 +67,11 @@ namespace TBAntiCheat.Detections.Modules
 
             eyeAngleHistory[player.Index] = new PlayerAimbotData()
             {
-                eyeAngleHistory = new AngleSnapshot[aimbotMaxHistory],
+                eyeAngleHistory = new QAngle[aimbotMaxHistory],
                 historyIndex = 0,
 
                 detections = 0
             };
-
-            ACCore.Log($"[TBAC] OnPlayerJoin -> {player.Index} | {player.Controller.PlayerName}");
         }
 
         internal override void OnPlayerLeave(PlayerData player)
@@ -315,8 +80,6 @@ namespace TBAntiCheat.Detections.Modules
             {
                 return;
             }
-
-            ACCore.Log($"[TBAC] OnPlayerLeave -> {player.Index} | {player.Controller.PlayerName}");
         }
 
         /*internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)
@@ -384,7 +147,7 @@ namespace TBAntiCheat.Detections.Modules
             PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
 
             int historyIndex = aimbotData.historyIndex;
-            AngleSnapshot lastAngle = aimbotData.eyeAngleHistory[historyIndex];
+            QAngle lastAngle = aimbotData.eyeAngleHistory[historyIndex];
 
             float maxAngle = config.Config.MaxAimbotAngle;
 
@@ -396,8 +159,8 @@ namespace TBAntiCheat.Detections.Modules
                     historyIndex = 0;
                 }
 
-                AngleSnapshot currentAngle = aimbotData.eyeAngleHistory[historyIndex];
-                float angleDiff = AngleSnapshot.Distance(lastAngle, currentAngle);
+                QAngle currentAngle = aimbotData.eyeAngleHistory[historyIndex];
+                float angleDiff = Distance(lastAngle, currentAngle);
 
                 //Normalize the angle so we can use it for our aimbot detection logic
                 if (angleDiff > 180f)
@@ -432,7 +195,8 @@ namespace TBAntiCheat.Detections.Modules
 
             PlayerAimbotData aimbotData = eyeAngleHistory[player.Index];
 
-            AngleSnapshot snapshot = new AngleSnapshot(player.Pawn.EyeAngles);
+            QAngle eyeAngles = player.Pawn.EyeAngles;
+            QAngle snapshot = new QAngle(eyeAngles.X, eyeAngles.Y, eyeAngles.Z);
             aimbotData.eyeAngleHistory[aimbotData.historyIndex] = snapshot;
 
             aimbotData.historyIndex++;
@@ -447,7 +211,16 @@ namespace TBAntiCheat.Detections.Modules
             foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
             {
                 PlayerData data = player.Value;
+                if (data == null)
+                {
+                    continue;
+                }
+
                 PlayerAimbotData aimbotData = eyeAngleHistory[data.Index];
+                if (aimbotData == null)
+                {
+                    continue;
+                }
 
                 aimbotData.Reset();
             }
@@ -547,6 +320,18 @@ namespace TBAntiCheat.Detections.Modules
 
             config.Config.MaxDetectionsBeforeAction = detections;
             config.Save();
+        }
+
+        // ----- Helper Functions ----- \\
+
+        public static float Distance(QAngle a, QAngle b)
+        {
+            float newX = a.X - b.X;
+            float newY = a.Y - b.Y;
+            float newZ = a.Z - b.Z;
+
+            float distance = MathF.Sqrt(newX * newX + newY * newY + newZ * newZ);
+            return distance;
         }
     }
 }

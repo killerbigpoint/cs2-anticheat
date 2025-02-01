@@ -18,7 +18,6 @@ namespace TBAntiCheat.Handlers
             plugin.RegisterEventHandler<EventPlayerDeath>(OnPlayerDeath);
 
             plugin.RegisterEventHandler<EventWeaponFire>(OnWeaponFire);
-            plugin.RegisterEventHandler<EventWeaponFire>(OnWeaponFire);
 
             plugin.RegisterEventHandler<EventRoundStart>(OnRoundStart);
             plugin.RegisterEventHandler<EventRoundEnd>(OnRoundEnd);

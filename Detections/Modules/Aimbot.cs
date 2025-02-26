@@ -45,14 +45,14 @@ namespace TBAntiCheat.Detections.Modules
         internal Aimbot() : base()
         {
             config = new BaseConfig<AimbotSaveData>("Aimbot");
-            playerData = new PlayerAimbotData[Server.MaxPlayers];
+            playerData = new PlayerAimbotData[64];
 
             CommandHandler.RegisterCommand("tbac_aimbot_enable", "Activates/Deactivates the aimbot detection", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_angle", "Max angle in a single tick before detection", OnAngleCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_detections", "Maximum detections before an action should be taken", OnDetectionsCommand);
 
-            ACCore.Log($"[TBAC] Aimbot Initialized (Capacity: {Server.MaxPlayers})");
+            ACCore.Log($"[TBAC] Aimbot Initialized");
         }
 
         internal override string Name => "Aimbot";
@@ -159,14 +159,18 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            if (player.Index < 0 || player.Index > 63)
+            PlayerAimbotData aimbotData;
+            try
+            {
+                aimbotData = playerData[player.Index];
+            }
+            catch
             {
                 ACCore.Log($"[TBAC] WARNING: {player.Controller.PlayerName} ({player.Index}) is OOB. Report this to the dev!");
-
                 player.NumErrors++;
-            }
 
-            PlayerAimbotData aimbotData = playerData[player.Index];
+                return;
+            }
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
             QAngle snapshot = new QAngle(eyeAngles.X, eyeAngles.Y, eyeAngles.Z);

@@ -17,8 +17,6 @@ namespace TBAntiCheat.Detections.Modules
     internal class RapidFireData
     {
         internal int lastBulletShotTick;
-        internal int lastAttackTick;
-
         internal int rapidDetections;
     }
 
@@ -56,8 +54,6 @@ namespace TBAntiCheat.Detections.Modules
             playerData[player.Index] = new RapidFireData()
             {
                 lastBulletShotTick = 0,
-                lastAttackTick = 0,
-                
                 rapidDetections = 0
             };
         }

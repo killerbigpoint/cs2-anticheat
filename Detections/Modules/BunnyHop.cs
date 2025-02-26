@@ -45,6 +45,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
+            if (player.IsPlayerValid() == false)
+            {
+                return;
+            }
+
             playerData.Add(player.Index, new BunnyHopData()
             {
                 perfectBhops = 0
@@ -53,6 +58,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerLeave(PlayerData player)
         {
+            if (player.IsPlayerValid() == false)
+            {
+                return;
+            }
+
             playerData.Remove(player.Index);
         }
 

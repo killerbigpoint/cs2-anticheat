@@ -48,6 +48,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
+            if (player.IsPlayerValid() == false)
+            {
+                return;
+            }
+
             playerData[player.Index] = new RapidFireData()
             {
                 lastBulletShotTick = 0,
@@ -64,7 +69,7 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            if (player.Controller.IsBot == true)
+            if (player.IsPlayerValid() == false)
             {
                 return;
             }

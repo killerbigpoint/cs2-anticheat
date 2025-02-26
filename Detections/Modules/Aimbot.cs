@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Entities;
 using CounterStrikeSharp.API.Modules.Utils;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
@@ -60,7 +61,7 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
-            if (player.Controller.IsBot == true)
+            if (player.IsPlayerValid() == false)
             {
                 return;
             }
@@ -78,7 +79,7 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerLeave(PlayerData player)
         {
-            if (player.Controller.IsBot == true)
+            if (player.IsPlayerValid() == false)
             {
                 return;
             }
@@ -93,7 +94,7 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            if (shooter.Controller.IsBot == true)
+            if (shooter.IsPlayerValid() == false)
             {
                 return;
             }
@@ -148,29 +149,12 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            if (player.Controller.IsBot == true)
+            if (player.IsPlayerValid() == false)
             {
                 return;
             }
 
-            //Safeguard against error spam for now
-            if (player.NumErrors >= 5)
-            {
-                return;
-            }
-
-            PlayerAimbotData aimbotData;
-            try
-            {
-                aimbotData = playerData[player.Index];
-            }
-            catch
-            {
-                ACCore.Log($"[TBAC] WARNING: {player.Controller.PlayerName} ({player.Index}) is OOB. Report this to the dev!");
-                player.NumErrors++;
-
-                return;
-            }
+            PlayerAimbotData aimbotData  = playerData[player.Index];
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
             QAngle snapshot = new QAngle(eyeAngles.X, eyeAngles.Y, eyeAngles.Z);
@@ -188,7 +172,7 @@ namespace TBAntiCheat.Detections.Modules
             foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
             {
                 PlayerData data = player.Value;
-                if (data.Controller.IsBot == true)
+                if (data.IsPlayerValid() == false)
                 {
                     continue;
                 }

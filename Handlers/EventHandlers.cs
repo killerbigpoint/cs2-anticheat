@@ -59,7 +59,8 @@ namespace TBAntiCheat.Handlers
                 Controller = controller,
                 Pawn = pawn,
 
-                Index = (int)controller.Index
+                Index = (int)controller.Index,
+                NumErrors = 0
             };
 
             if (BanHandler.IsPlayerBanned(player) == true)

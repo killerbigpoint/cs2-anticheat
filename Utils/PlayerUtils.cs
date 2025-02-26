@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+﻿using CounterStrikeSharp.API.ValveConstants.Protobuf;
 using TBAntiCheat.Core;
 
 namespace TBAntiCheat.Utils
@@ -7,7 +7,7 @@ namespace TBAntiCheat.Utils
     {
         internal static void KickPlayer(PlayerData player, string reason)
         {
-            Server.ExecuteCommand($"kickid {player.Controller.UserId} {reason}");
+            player.Controller.Disconnect(NetworkDisconnectionReason.NETWORK_DISCONNECT_DISCONNECT_BY_SERVER);
         }
     }
 }

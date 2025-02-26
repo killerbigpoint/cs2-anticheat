@@ -40,19 +40,19 @@ namespace TBAntiCheat.Detections.Modules
         private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)
 
         private readonly BaseConfig<AimbotSaveData> config;
-        private readonly PlayerAimbotData[] eyeAngleHistory;
+        private readonly PlayerAimbotData[] playerData;
 
         internal Aimbot() : base()
         {
             config = new BaseConfig<AimbotSaveData>("Aimbot");
-            eyeAngleHistory = new PlayerAimbotData[Server.MaxPlayers];
+            playerData = new PlayerAimbotData[Server.MaxPlayers];
 
             CommandHandler.RegisterCommand("tbac_aimbot_enable", "Activates/Deactivates the aimbot detection", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_angle", "Max angle in a single tick before detection", OnAngleCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_detections", "Maximum detections before an action should be taken", OnDetectionsCommand);
 
-            ACCore.Log($"[TBAC] Aimbot Initialized");
+            ACCore.Log($"[TBAC] Aimbot Initialized (Capacity: {Server.MaxPlayers})");
         }
 
         internal override string Name => "Aimbot";
@@ -65,13 +65,15 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            eyeAngleHistory[player.Index] = new PlayerAimbotData()
+            playerData[player.Index] = new PlayerAimbotData()
             {
                 eyeAngleHistory = new QAngle[aimbotMaxHistory],
                 historyIndex = 0,
 
                 detections = 0
             };
+
+            ACCore.Log($"[TBAC] Initialized player with index {player.Index}");
         }
 
         internal override void OnPlayerLeave(PlayerData player)
@@ -80,6 +82,8 @@ namespace TBAntiCheat.Detections.Modules
             {
                 return;
             }
+
+            ACCore.Log($"[TBAC] Disposed player with index {player.Index}");
         }
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
@@ -89,12 +93,18 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            if (victim.Pawn.AbsOrigin == null || shooter.Pawn.AbsOrigin == null)
+            if (shooter.Controller.IsBot == true)
             {
                 return;
             }
 
-            PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
+            if (victim.Pawn.AbsOrigin == null || shooter.Pawn.AbsOrigin == null)
+            {
+                ACCore.Log("[TBAC] Something is wrong here. AbsOrigin on either of these is null");
+                return;
+            }
+
+            PlayerAimbotData aimbotData = playerData[shooter.Index];
 
             int historyIndex = aimbotData.historyIndex;
             QAngle lastAngle = aimbotData.eyeAngleHistory[historyIndex];
@@ -143,7 +153,20 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            PlayerAimbotData aimbotData = eyeAngleHistory[player.Index];
+            //Safeguard against error spam for now
+            if (player.NumErrors >= 5)
+            {
+                return;
+            }
+
+            if (player.Index < 0 || player.Index > 63)
+            {
+                ACCore.Log($"[TBAC] WARNING: {player.Controller.PlayerName} ({player.Index}) is OOB. Report this to the dev!");
+
+                player.NumErrors++;
+            }
+
+            PlayerAimbotData aimbotData = playerData[player.Index];
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
             QAngle snapshot = new QAngle(eyeAngles.X, eyeAngles.Y, eyeAngles.Z);
@@ -161,17 +184,12 @@ namespace TBAntiCheat.Detections.Modules
             foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
             {
                 PlayerData data = player.Value;
-                if (data == null)
+                if (data.Controller.IsBot == true)
                 {
                     continue;
                 }
 
-                PlayerAimbotData aimbotData = eyeAngleHistory[data.Index];
-                if (aimbotData == null)
-                {
-                    continue;
-                }
-
+                PlayerAimbotData aimbotData = playerData[data.Index];
                 aimbotData.Reset();
             }
         }

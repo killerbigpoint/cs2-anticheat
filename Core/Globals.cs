@@ -11,6 +11,7 @@ namespace TBAntiCheat.Core
         internal required CCSPlayerPawn Pawn;
 
         internal required int Index;
+        internal required int NumErrors;
     }
 
     internal static class Globals

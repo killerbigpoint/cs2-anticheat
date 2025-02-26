@@ -88,6 +88,11 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
+            if (Globals.Players.ContainsKey(controller.Index) == false)
+            {
+                return HookResult.Continue;
+            }
+
             PlayerData player = Globals.Players[controller.Index];
 
             BaseCaller.OnPlayerLeave(player);

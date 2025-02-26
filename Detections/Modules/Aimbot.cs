@@ -82,56 +82,6 @@ namespace TBAntiCheat.Detections.Modules
             }
         }
 
-        /*internal override void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)
-        {
-            //TODO: This ain't ready yet at all. Needs more work
-
-            //You might be wondering, why the fuck are we converting it to Quaternion and then back to a Vector/AngleSnapshot?
-            //Well let me tell you, because I simply suck at math and CounterStrikeSharp don't provide any way to get a bone position
-            //So here we find the approximate offset from the abs origin of each bone via the use of some complicated math that I totally
-            //Didn't steal from Unity and some StackOverflow posts. But hey, it gives us exactly what we want for a "proper" angle
-            Quaternion originAbsPos = new Quaternion(shooter.Pawn.AbsOrigin);
-            AngleSnapshot originHead = originAbsPos * originOffsetHead;
-
-            AngleSnapshot targetAbs = new AngleSnapshot(victim.Pawn.AbsOrigin);
-            Quaternion targetAbsQuat = new Quaternion(targetAbs);
-
-            AngleSnapshot targetPos = hitgroup switch
-            {
-                HitGroup_t.HITGROUP_HEAD => targetAbsQuat * originOffsetHead,
-                HitGroup_t.HITGROUP_CHEST => targetAbsQuat * originOffsetStomach,
-                HitGroup_t.HITGROUP_STOMACH => targetAbsQuat * originOffsetChest,
-                HitGroup_t.HITGROUP_LEFTARM => targetAbsQuat * originOffsetLeftArm,
-                HitGroup_t.HITGROUP_RIGHTARM => targetAbsQuat * originOffsetRightArm,
-                HitGroup_t.HITGROUP_LEFTLEG => targetAbsQuat * originOffsetLeftLeg,
-                HitGroup_t.HITGROUP_RIGHTLEG => targetAbsQuat * originOffsetRightLeg,
-                _ => targetAbs,
-            };
-
-            CWeaponMP9? mp9 = Utilities.CreateEntityByName<CWeaponMP9>("weapon_mp9");
-            if (mp9 != null)
-            {
-                Vector enginePos = new Vector(targetPos.x, targetPos.y, targetPos.z);
-                mp9.Teleport();
-            }
-            else
-            {
-                Server.PrintToChatAll($"MP9 is null");
-            }
-
-            AngleSnapshot shotEyeAngles = AngleSnapshot.Direction(originHead, targetPos);
-
-            //NOTE: To increase the validity of this in the future
-            //We probably need to account for spread too, how though? I have no idea as of now but we'll figure it out like always
-            //AngleSnapshot calculatedSpread = new AngleSnapshot();
-            //shotEyeAngles += calculatedSpread;
-
-            PlayerAimbotData aimbotData = eyeAngleHistory[shooter.Index];
-            aimbotData.eyeAngleHistory[aimbotData.historyIndex] = shotEyeAngles;
-
-            Server.PrintToChatAll($"Hurt: {shooter.Controller.PlayerName} -> {shotEyeAngles} ({hitgroup})");
-        }*/
-
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
             if (config.Config.DetectionEnabled == false)

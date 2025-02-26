@@ -54,12 +54,16 @@ namespace TBAntiCheat.Handlers
                 return;
             }
 
+            // We need to subtract 1 here because player indexes always start at 1.
+            // This is because the world also has an entity index which is 0.
+            // So to properly use arrays we need to pretend the indexes are 1 less
+            uint properIndex = controller.Index - 1;
             PlayerData player = new PlayerData()
             {
                 Controller = controller,
                 Pawn = pawn,
 
-                Index = (int)controller.Index,
+                Index = properIndex,
                 NumErrors = 0
             };
 
@@ -71,8 +75,8 @@ namespace TBAntiCheat.Handlers
                 return;
             }
 
-            Globals.Players.Add(controller.Index, player);
-            BaseCaller.OnPlayerJoin(player);
+            Globals.Players.Add(properIndex, player);
+            BaseCaller. OnPlayerJoin(player);
         }
 
         private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)

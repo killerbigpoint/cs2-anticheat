@@ -33,12 +33,12 @@ namespace TBAntiCheat.Detections.Modules
         internal override ActionType ActionType => config.Config.DetectionAction;
 
         private readonly BaseConfig<RapidFireSaveData> config;
-        private readonly Dictionary<int, RapidFireData> playerData;
+        private readonly Dictionary<uint, RapidFireData> playerData;
 
         internal RapidFire() : base()
         {
             config = new BaseConfig<RapidFireSaveData>("RapidFire");
-            playerData = new Dictionary<int, RapidFireData>(Server.MaxPlayers);
+            playerData = new Dictionary<uint, RapidFireData>(Server.MaxPlayers);
 
             CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates RapidFire detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_rapidfire_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);

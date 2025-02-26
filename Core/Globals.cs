@@ -10,7 +10,7 @@ namespace TBAntiCheat.Core
         internal required CCSPlayerController Controller;
         internal required CCSPlayerPawn Pawn;
 
-        internal required int Index;
+        internal required uint Index;
         internal required int NumErrors;
     }
 

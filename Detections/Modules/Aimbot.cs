@@ -45,7 +45,7 @@ namespace TBAntiCheat.Detections.Modules
         internal Aimbot() : base()
         {
             config = new BaseConfig<AimbotSaveData>("Aimbot");
-            playerData = new PlayerAimbotData[64];
+            playerData = new PlayerAimbotData[Server.MaxPlayers];
 
             CommandHandler.RegisterCommand("tbac_aimbot_enable", "Activates/Deactivates the aimbot detection", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);

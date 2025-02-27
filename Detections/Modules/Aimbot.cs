@@ -73,18 +73,6 @@ namespace TBAntiCheat.Detections.Modules
 
                 detections = 0
             };
-
-            ACCore.Log($"[TBAC] Initialized player with index {player.Index}");
-        }
-
-        internal override void OnPlayerLeave(PlayerData player)
-        {
-            if (player.IsPlayerValid() == false)
-            {
-                return;
-            }
-
-            ACCore.Log($"[TBAC] Disposed player with index {player.Index}");
         }
 
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
@@ -96,12 +84,6 @@ namespace TBAntiCheat.Detections.Modules
 
             if (shooter.IsPlayerValid() == false)
             {
-                return;
-            }
-
-            if (victim.Pawn.AbsOrigin == null || shooter.Pawn.AbsOrigin == null)
-            {
-                ACCore.Log("[TBAC] Something is wrong here. AbsOrigin on either of these is null");
                 return;
             }
 

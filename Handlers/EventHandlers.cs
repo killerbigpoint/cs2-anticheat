@@ -57,7 +57,7 @@ namespace TBAntiCheat.Handlers
             // We need to subtract 1 here because player indexes always start at 1.
             // This is because the world also has an entity index which is 0.
             // So to properly use arrays we need to pretend the indexes are 1 less
-            uint properIndex = controller.Index - 1;
+            int properIndex = (int)controller.Index - 1;
             PlayerData player = new PlayerData()
             {
                 Controller = controller,
@@ -75,7 +75,11 @@ namespace TBAntiCheat.Handlers
             }
 
             Globals.Players[properIndex] = player;
+            Globals.PlayerReverseLookup[(int)pawn.Index] = properIndex;
+
             BaseCaller.OnPlayerJoin(player);
+
+            ACCore.Log($"[TBAC] Initialized player with index {player.Index} (Pawn: {pawn.Index})");
         }
 
         private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)
@@ -86,11 +90,21 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            uint properIndex = controller.Index - 1;
+            CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
+            if (pawn == null)
+            {
+                return HookResult.Continue;
+            }
+
+            int properIndex = (int)controller.Index - 1;
             PlayerData player = Globals.Players[properIndex];
 
             BaseCaller.OnPlayerLeave(player);
+
             Globals.Players[properIndex] = null!;
+            Globals.PlayerReverseLookup[(int)pawn.Index] = -1;
+
+            ACCore.Log($"[TBAC] Disposed player with index {player.Index} (Pawn: {pawn.Index})");
 
             return HookResult.Continue;
         }
@@ -103,7 +117,7 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            uint properIndex = controller.Index - 1;
+            int properIndex = (int)controller.Index - 1;
             PlayerData player = Globals.Players[properIndex];
 
             BaseCaller.OnPlayerJump(player);
@@ -122,8 +136,8 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            uint properIndexVictim = victimController.Index - 1;
-            uint properIndexShooter = shooterController.Index - 1;
+            int properIndexVictim = (int)victimController.Index - 1;
+            int properIndexShooter = (int)shooterController.Index - 1;
 
             PlayerData victim = Globals.Players[properIndexVictim];
             PlayerData shooter = Globals.Players[properIndexShooter];
@@ -144,11 +158,16 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            uint properIndexVictim = victimController.Index - 1;
-            uint properIndexShooter = shooterController.Index - 1;
+            int properIndexVictim = (int)victimController.Index - 1;
+            int properIndexShooter = (int)shooterController.Index - 1;
 
             PlayerData victim = Globals.Players[properIndexVictim];
             PlayerData shooter = Globals.Players[properIndexShooter];
+
+            if (victim == null || shooter == null)
+            {
+                return HookResult.Continue;
+            }
 
             BaseCaller.OnPlayerDead(victim, shooter);
 
@@ -163,7 +182,7 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            uint properIndex = controller.Index - 1;
+            int properIndex = (int)controller.Index - 1;
             PlayerData shooter = Globals.Players[properIndex];
 
             BaseCaller.OnPlayerShoot(shooter);

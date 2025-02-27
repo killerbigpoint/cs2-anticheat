@@ -10,7 +10,7 @@ namespace TBAntiCheat.Core
         internal required CCSPlayerController Controller;
         internal required CCSPlayerPawn Pawn;
 
-        internal required uint Index;
+        internal required int Index;
 
         internal bool IsPlayerValid()
         {
@@ -40,6 +40,8 @@ namespace TBAntiCheat.Core
         private static ACCore? pluginCore = null;
 
         internal static PlayerData[] Players = [];
+        internal static Dictionary<int, int> PlayerReverseLookup = []; // Use when trying to figure out which Pawn belongs to what Controller
+
         internal static BaseDetection[] Detections = [];
 
         internal static void PreInit(ACCore core)
@@ -59,6 +61,12 @@ namespace TBAntiCheat.Core
             ACCore.Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
             Players = new PlayerData[Server.MaxPlayers];
+            PlayerReverseLookup = new Dictionary<int, int>(Server.MaxPlayers);
+            for (int i = 0; i < PlayerReverseLookup.Count; i++)
+            {
+                PlayerReverseLookup[i] = -1;
+            }
+
             Detections =
             [
                 new Aimbot(),

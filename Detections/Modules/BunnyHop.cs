@@ -30,12 +30,12 @@ namespace TBAntiCheat.Detections.Modules
         internal override ActionType ActionType => config.Config.DetectionAction;
 
         private readonly BaseConfig<BunnyHopSaveData> config;
-        private readonly Dictionary<uint, BunnyHopData> playerData;
+        private readonly Dictionary<int, BunnyHopData> playerData;
 
         internal BunnyHop() : base()
         {
             config = new BaseConfig<BunnyHopSaveData>("BunnyHop");
-            playerData = new Dictionary<uint, BunnyHopData>(Server.MaxPlayers);
+            playerData = new Dictionary<int, BunnyHopData>(Server.MaxPlayers);
 
             CommandHandler.RegisterCommand("tbac_bhop_enable", "Deactivates/Activates BunnyHop detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_bhop_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);

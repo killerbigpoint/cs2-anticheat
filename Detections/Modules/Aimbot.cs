@@ -169,15 +169,19 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnRoundStart()
         {
-            foreach (KeyValuePair<uint, PlayerData> player in Globals.Players)
+            foreach (PlayerData player in Globals.Players)
             {
-                PlayerData data = player.Value;
-                if (data.IsPlayerValid() == false)
+                if (player == null)
                 {
                     continue;
                 }
 
-                PlayerAimbotData aimbotData = playerData[data.Index];
+                if (player.IsPlayerValid() == false)
+                {
+                    continue;
+                }
+
+                PlayerAimbotData aimbotData = playerData[player.Index];
                 aimbotData.Reset();
             }
         }

@@ -74,7 +74,7 @@ namespace TBAntiCheat.Handlers
                 return;
             }
 
-            Globals.Players.Add(properIndex, player);
+            Globals.Players[properIndex] = player;
             BaseCaller.OnPlayerJoin(player);
         }
 
@@ -86,16 +86,11 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            if (Globals.Players.ContainsKey(controller.Index) == false)
-            {
-                return HookResult.Continue;
-            }
-
             uint properIndex = controller.Index - 1;
             PlayerData player = Globals.Players[properIndex];
 
             BaseCaller.OnPlayerLeave(player);
-            Globals.Players.Remove(properIndex);
+            Globals.Players[properIndex] = null!;
 
             return HookResult.Continue;
         }

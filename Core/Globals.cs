@@ -39,7 +39,7 @@ namespace TBAntiCheat.Core
 
         private static ACCore? pluginCore = null;
 
-        internal static Dictionary<uint, PlayerData> Players = [];
+        internal static PlayerData[] Players = [];
         internal static BaseDetection[] Detections = [];
 
         internal static void PreInit(ACCore core)
@@ -58,7 +58,7 @@ namespace TBAntiCheat.Core
 
             ACCore.Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
-            Players = new Dictionary<uint, PlayerData>(Server.MaxPlayers);
+            Players = new PlayerData[Server.MaxPlayers];
             Detections =
             [
                 new Aimbot(),

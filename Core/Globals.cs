@@ -19,7 +19,7 @@ namespace TBAntiCheat.Core
                 return false;
             }
 
-            if (Controller.IsHLTV == false)
+            if (Controller.IsHLTV == true)
             {
                 return false;
             }

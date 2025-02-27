@@ -26,7 +26,7 @@ namespace TBAntiCheat.Handlers
             {
                 foreach (CCSPlayerController controller in Utilities.GetPlayers())
                 {
-                    JoinPlayer(controller);
+                    JoinPlayerImpl(controller);
                 }
             }
 
@@ -41,12 +41,12 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            JoinPlayer(controller);
+            JoinPlayerImpl(controller);
 
             return HookResult.Continue;
         }
 
-        private static void JoinPlayer(CCSPlayerController controller)
+        private static void JoinPlayerImpl(CCSPlayerController controller)
         {
             CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
             if (pawn == null)
@@ -86,42 +86,31 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            if (controller.IsBot == true)
-            {
-                return HookResult.Continue;
-            }
-
             if (Globals.Players.ContainsKey(controller.Index) == false)
             {
                 return HookResult.Continue;
             }
 
-            PlayerData player = Globals.Players[controller.Index];
+            uint properIndex = controller.Index - 1;
+            PlayerData player = Globals.Players[properIndex];
 
             BaseCaller.OnPlayerLeave(player);
-            Globals.Players.Remove(controller.Index);
+            Globals.Players.Remove(properIndex);
 
             return HookResult.Continue;
         }
 
         private static HookResult OnPlayerJump(EventPlayerJump jumpEvent, GameEventInfo _)
         {
-            if (jumpEvent.Userid == null)
+            CCSPlayerController? controller = jumpEvent.Userid;
+            if (controller == null || controller.IsValid == false)
             {
                 return HookResult.Continue;
             }
 
-            if (jumpEvent.Userid.IsBot == true)
-            {
-                return HookResult.Continue;
-            }
+            uint properIndex = controller.Index - 1;
+            PlayerData player = Globals.Players[properIndex];
 
-            if (Globals.Players.ContainsKey(jumpEvent.Userid.Index) == false)
-            {
-                return HookResult.Continue;
-            }
-
-            PlayerData player = Globals.Players[jumpEvent.Userid.Index];
             BaseCaller.OnPlayerJump(player);
 
             return HookResult.Continue;
@@ -129,23 +118,19 @@ namespace TBAntiCheat.Handlers
 
         private static HookResult OnPlayerHurt(EventPlayerHurt hurtEvent, GameEventInfo _)
         {
-            if (hurtEvent.Userid == null || hurtEvent.Attacker == null)
+            CCSPlayerController? victimController = hurtEvent.Userid;
+            CCSPlayerController? shooterController = hurtEvent.Attacker;
+
+            if (victimController == null || shooterController == null)
             {
                 return HookResult.Continue;
             }
 
-            if (hurtEvent.Attacker.IsBot == true)
-            {
-                return HookResult.Continue;
-            }
+            uint properIndexVictim = victimController.Index - 1;
+            uint properIndexShooter = shooterController.Index - 1;
 
-            if (Globals.Players.ContainsKey(hurtEvent.Userid.Index) == false)
-            {
-                return HookResult.Continue;
-            }
-
-            PlayerData victim = Globals.Players[hurtEvent.Userid.Index];
-            PlayerData shooter = Globals.Players[hurtEvent.Attacker.Index];
+            PlayerData victim = Globals.Players[properIndexVictim];
+            PlayerData shooter = Globals.Players[properIndexShooter];
 
             BaseCaller.OnPlayerHurt(victim, shooter, (HitGroup_t)hurtEvent.Hitgroup);
 
@@ -154,23 +139,19 @@ namespace TBAntiCheat.Handlers
 
         private static HookResult OnPlayerDeath(EventPlayerDeath deathEvent, GameEventInfo _)
         {
-            if (deathEvent.Userid == null || deathEvent.Attacker == null)
+            CCSPlayerController? victimController = deathEvent.Userid;
+            CCSPlayerController? shooterController = deathEvent.Attacker;
+
+            if (victimController == null || shooterController == null)
             {
                 return HookResult.Continue;
             }
 
-            if (deathEvent.Attacker.IsBot == true)
-            {
-                return HookResult.Continue;
-            }
+            uint properIndexVictim = victimController.Index - 1;
+            uint properIndexShooter = shooterController.Index - 1;
 
-            if (Globals.Players.ContainsKey(deathEvent.Userid.Index) == false)
-            {
-                return HookResult.Continue;
-            }
-
-            PlayerData victim = Globals.Players[deathEvent.Userid.Index];
-            PlayerData shooter = Globals.Players[deathEvent.Attacker.Index];
+            PlayerData victim = Globals.Players[properIndexVictim];
+            PlayerData shooter = Globals.Players[properIndexShooter];
 
             BaseCaller.OnPlayerDead(victim, shooter);
 
@@ -179,17 +160,15 @@ namespace TBAntiCheat.Handlers
 
         private static HookResult OnWeaponFire(EventWeaponFire shootEvent, GameEventInfo _)
         {
-            if (shootEvent.Userid == null)
+            CCSPlayerController? controller = shootEvent.Userid;
+            if (controller == null)
             {
                 return HookResult.Continue;
             }
 
-            if (Globals.Players.ContainsKey(shootEvent.Userid.Index) == false)
-            {
-                return HookResult.Continue;
-            }
+            uint properIndex = controller.Index - 1;
+            PlayerData shooter = Globals.Players[properIndex];
 
-            PlayerData shooter = Globals.Players[shootEvent.Userid.Index];
             BaseCaller.OnPlayerShoot(shooter);
 
             return HookResult.Continue;

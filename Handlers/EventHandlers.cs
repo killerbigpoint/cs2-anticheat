@@ -36,7 +36,7 @@ namespace TBAntiCheat.Handlers
         private static HookResult OnPlayerConnectFull(EventPlayerConnectFull connectEvent, GameEventInfo _)
         {
             CCSPlayerController? controller = connectEvent.Userid;
-            if (controller == null || controller.IsValid == false)
+            if (controller == null || controller.IsValid == false || controller.IsBot == true)
             {
                 return HookResult.Continue;
             }
@@ -75,13 +75,13 @@ namespace TBAntiCheat.Handlers
             }
 
             Globals.Players.Add(properIndex, player);
-            BaseCaller. OnPlayerJoin(player);
+            BaseCaller.OnPlayerJoin(player);
         }
 
         private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)
         {
             CCSPlayerController? controller = connectEvent.Userid;
-            if (controller == null || controller.IsValid == false)
+            if (controller == null || controller.IsValid == false || controller.IsBot == true)
             {
                 return HookResult.Continue;
             }
@@ -103,7 +103,7 @@ namespace TBAntiCheat.Handlers
         private static HookResult OnPlayerJump(EventPlayerJump jumpEvent, GameEventInfo _)
         {
             CCSPlayerController? controller = jumpEvent.Userid;
-            if (controller == null || controller.IsValid == false)
+            if (controller == null || controller.IsValid == false || controller.IsBot == true)
             {
                 return HookResult.Continue;
             }
@@ -121,7 +121,8 @@ namespace TBAntiCheat.Handlers
             CCSPlayerController? victimController = hurtEvent.Userid;
             CCSPlayerController? shooterController = hurtEvent.Attacker;
 
-            if (victimController == null || shooterController == null)
+            if (victimController == null || victimController.IsValid == false || victimController.IsBot == true ||
+                shooterController == null || shooterController.IsValid == false || shooterController.IsBot == true)
             {
                 return HookResult.Continue;
             }
@@ -142,7 +143,8 @@ namespace TBAntiCheat.Handlers
             CCSPlayerController? victimController = deathEvent.Userid;
             CCSPlayerController? shooterController = deathEvent.Attacker;
 
-            if (victimController == null || shooterController == null)
+            if (victimController == null || victimController.IsValid == false || victimController.IsBot == true ||
+                shooterController == null || shooterController.IsValid == false || shooterController.IsBot == true)
             {
                 return HookResult.Continue;
             }
@@ -161,7 +163,7 @@ namespace TBAntiCheat.Handlers
         private static HookResult OnWeaponFire(EventWeaponFire shootEvent, GameEventInfo _)
         {
             CCSPlayerController? controller = shootEvent.Userid;
-            if (controller == null)
+            if (controller == null || controller.IsValid == false || controller.IsBot == true)
             {
                 return HookResult.Continue;
             }

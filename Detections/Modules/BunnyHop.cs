@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
@@ -68,6 +68,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerShoot(PlayerData player)
         {
+            if (player.IsPlayerValid() == false)
+            {
+                return;
+            }
+            
             PlayerFlags flags = (PlayerFlags)player.Pawn.Flags;
             bool onGround = flags.HasFlag(PlayerFlags.FL_ONGROUND);
 
@@ -76,11 +81,21 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJump(PlayerData player)
         {
+            if (player.IsPlayerValid() == false)
+            {
+                return;
+            }
+            
             //Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped Goofy Ass Mf");
         }
 
         internal override void OnPlayerTick(PlayerData player)
         {
+            if (player.IsPlayerValid() == false)
+            {
+                return;
+            }
+            
             BunnyHopData data = playerData[player.Index];
 
             PlayerButtons buttons = player.Controller.Buttons;

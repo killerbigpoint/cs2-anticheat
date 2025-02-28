@@ -2,7 +2,6 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Entities;
 using CounterStrikeSharp.API.Modules.Utils;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
@@ -53,7 +52,7 @@ namespace TBAntiCheat.Detections.Modules
             CommandHandler.RegisterCommand("tbac_aimbot_angle", "Max angle in a single tick before detection", OnAngleCommand);
             CommandHandler.RegisterCommand("tbac_aimbot_detections", "Maximum detections before an action should be taken", OnDetectionsCommand);
 
-            ACCore.Log($"[TBAC] Aimbot Initialized");
+            Globals.Log($"[TBAC] Aimbot Initialized");
         }
 
         internal override string Name => "Aimbot";
@@ -153,7 +152,7 @@ namespace TBAntiCheat.Detections.Modules
             int maxDetections = config.Config.MaxDetectionsBeforeAction;
 
             data.detections++;
-            ACCore.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections)");
+            Globals.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections)");
 
             if (data.detections < maxDetections)
             {

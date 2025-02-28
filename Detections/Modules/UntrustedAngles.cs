@@ -31,7 +31,7 @@ namespace TBAntiCheat.Detections.Modules
             CommandHandler.RegisterCommand("tbac_untrustedangles_enable", "Deactivates/Activates UntrustedAngles detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_untrustedangles_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
 
-            ACCore.Log($"[TBAC] UntrustedAngles Initialized");
+            Globals.Log($"[TBAC] UntrustedAngles Initialized");
         }
 
         internal override void OnPlayerTick(PlayerData player)

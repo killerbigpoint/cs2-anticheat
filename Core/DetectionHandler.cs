@@ -21,13 +21,13 @@ namespace TBAntiCheat.Core
 
                 case ActionType.Log:
                 {
-                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} is suspected of using {metadata.detection.Name} ({metadata.reason})");
+                    Globals.Log($"[TBAC] {metadata.player.Controller.PlayerName} is suspected of using {metadata.detection.Name} ({metadata.reason})");
                     break;
                 }
 
                 case ActionType.Kick:
                 {
-                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
+                    Globals.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
                     PlayerUtils.KickPlayer(metadata.player, $"Kicked for usage of {metadata.detection.Name}");
 
                     break;
@@ -35,7 +35,7 @@ namespace TBAntiCheat.Core
 
                 case ActionType.Ban:
                 {
-                    ACCore.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
+                    Globals.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.detection.Name} ({metadata.reason})");
 
                     BanHandler.BanPlayer(metadata.player, $"Kicked for usage of {metadata.detection.Name}");
                     PlayerUtils.KickPlayer(metadata.player, $"Kicked for usage of {metadata.detection.Name}");

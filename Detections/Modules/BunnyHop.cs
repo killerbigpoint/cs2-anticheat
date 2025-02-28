@@ -40,7 +40,7 @@ namespace TBAntiCheat.Detections.Modules
             CommandHandler.RegisterCommand("tbac_bhop_enable", "Deactivates/Activates BunnyHop detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_bhop_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
 
-            ACCore.Log($"[TBAC] BunnyHop Initialized");
+            Globals.Log($"[TBAC] BunnyHop Initialized");
         }
 
         internal override void OnPlayerJoin(PlayerData player)

@@ -12,7 +12,7 @@ namespace TBAntiCheat.Handlers
         {
             plugin = basePlugin;
 
-            ACCore.Log($"[TBAC] CommandHandler Initialized");
+            Globals.Log($"[TBAC] CommandHandler Initialized");
         }
 
         internal static bool RegisterCommand(string command, string description, CommandInfo.CommandCallback handler)

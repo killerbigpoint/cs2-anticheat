@@ -1,5 +1,6 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
+using Microsoft.Extensions.Logging;
 using TBAntiCheat.Detections;
 using TBAntiCheat.Detections.Modules;
 
@@ -18,17 +19,17 @@ namespace TBAntiCheat.Core
         private static bool initializedOnce = false;
 
         private static ACCore? pluginCore = null;
+        private static ILogger? logger = null;
 
         internal static PlayerData[] Players = [];
         internal static Dictionary<int, int> PlayerReverseLookup = []; // Use when trying to figure out which Pawn belongs to what Controller
 
         internal static BaseDetection[] Detections = [];
 
-        internal static void PreInit(ACCore core)
+        internal static void PreInit(ACCore core, ILogger log)
         {
             pluginCore = core;
-
-            ACCore.Log($"[TBAC] Globals Pre-Init");
+            logger = log;
         }
 
         internal static void Initialize(bool forceReinitialize)
@@ -38,7 +39,7 @@ namespace TBAntiCheat.Core
                 return;
             }
 
-            ACCore.Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
+            Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
             Players = new PlayerData[Server.MaxPlayers];
             PlayerReverseLookup = new Dictionary<int, int>(Server.MaxPlayers);
@@ -58,7 +59,7 @@ namespace TBAntiCheat.Core
 
             initializedOnce = true;
 
-            ACCore.Log($"[TBAC] Globals Initialized");
+            Log($"[TBAC] Globals Initialized");
         }
 
         internal static string GetModuleDirectory()
@@ -69,6 +70,11 @@ namespace TBAntiCheat.Core
             }
 
             return pluginCore.ModuleDirectory;
+        }
+
+        internal static void Log(string message)
+        {
+            logger?.Log(LogLevel.Information, message);
         }
     }
 }

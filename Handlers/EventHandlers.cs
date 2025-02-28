@@ -30,7 +30,7 @@ namespace TBAntiCheat.Handlers
                 }
             }
 
-            ACCore.Log($"[TBAC] EventHandlers Initialized");
+            Globals.Log($"[TBAC] EventHandlers Initialized");
         }
 
         private static HookResult OnPlayerConnectFull(EventPlayerConnectFull connectEvent, GameEventInfo _)
@@ -79,7 +79,7 @@ namespace TBAntiCheat.Handlers
 
             BaseCaller.OnPlayerJoin(player);
 
-            ACCore.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
+            Globals.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
         }
 
         private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)
@@ -105,7 +105,7 @@ namespace TBAntiCheat.Handlers
             }
             else
             {
-                ACCore.Log($"[TBAC] PlayerData is null! Report this to the dev. (Index: {properIndex})");
+                Globals.Log($"[TBAC] PlayerData is null! Report this to the dev. (Index: {properIndex})");
             }
 
             Globals.Players[properIndex] = null!;
@@ -113,7 +113,7 @@ namespace TBAntiCheat.Handlers
 
             if (player != null)
             {
-                ACCore.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
+                Globals.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
             }
 
             return HookResult.Continue;

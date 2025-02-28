@@ -11,7 +11,7 @@ namespace TBAntiCheat.Handlers
             plugin.RegisterListener<Listeners.OnTick>(OnGameTick);
             plugin.RegisterListener<Listeners.OnMapStart>(OnMapStart);
 
-            ACCore.Log($"[TBAC] EventListeners Initialized");
+            Globals.Log($"[TBAC] EventListeners Initialized");
         }
 
         private static void OnMapStart(string mapName)

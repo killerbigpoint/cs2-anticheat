@@ -15,7 +15,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -30,7 +30,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch (Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
@@ -150,7 +150,7 @@ namespace TBAntiCheat.Detections
                 }
                 catch(Exception e)
                 {
-                    ACCore.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }

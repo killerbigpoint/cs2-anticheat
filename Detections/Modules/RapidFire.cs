@@ -41,7 +41,7 @@ namespace TBAntiCheat.Detections.Modules
             CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates RapidFire detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_rapidfire_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
 
-            ACCore.Log($"[TBAC] RapidFire Initialized");
+            Globals.Log($"[TBAC] RapidFire Initialized");
         }
 
         internal override void OnPlayerJoin(PlayerData player)
@@ -83,7 +83,7 @@ namespace TBAntiCheat.Detections.Modules
             {
                 case CSWeaponMode.Primary_Mode: nextAttack = weapon.NextPrimaryAttackTick; break;
                 case CSWeaponMode.Secondary_Mode: nextAttack = weapon.NextSecondaryAttackTick; break;
-                default: ACCore.Log($"[TBAC] Unsupported WeaponMode: {(int)weapon.WeaponMode} on {weaponBase.DesignerName}"); return;
+                default: Globals.Log($"[TBAC] Unsupported WeaponMode: {(int)weapon.WeaponMode} on {weaponBase.DesignerName}"); return;
             }
 
             int serverTickCount = Server.TickCount;
@@ -100,14 +100,14 @@ namespace TBAntiCheat.Detections.Modules
             if (tickDiff == 1)
             {
                 string detection = $"RapidFire Detected -> Player: {player.Controller.PlayerName} | Weapon: {weaponBase.DesignerName} | ServerTickCount: {serverTickCount} | TickDiff: {tickDiff} | NextAttackDiff: {nextAttackDiff} | NextAttack: {nextAttack} | LastBulletShotTick: {data.lastBulletShotTick}";
-                ACCore.Log($"[TBAC] {detection}");
+                Globals.Log($"[TBAC] {detection}");
 
                 data.rapidDetections++;
             }
             else if (nextAttackDiff > 32)
             {
                 string detection = $"RapidFire Detected -> Player: {player.Controller.PlayerName} | Weapon: {weaponBase.DesignerName} | ServerTickCount: {serverTickCount} | TickDiff: {tickDiff} | NextAttackDiff: {nextAttackDiff} | NextAttack: {nextAttack} | LastBulletShotTick: {data.lastBulletShotTick}";
-                ACCore.Log($"[TBAC] {detection}");
+                Globals.Log($"[TBAC] {detection}");
 
                 data.rapidDetections++;
             }

@@ -1,6 +1,5 @@
 ﻿using CounterStrikeSharp.API.Core.Attributes;
 using CounterStrikeSharp.API.Core;
-using Microsoft.Extensions.Logging;
 using TBAntiCheat.Handlers;
 
 namespace TBAntiCheat.Core
@@ -13,15 +12,11 @@ namespace TBAntiCheat.Core
         public override string ModuleAuthor => "Killer_bigpoint";
         public override string ModuleDescription => "Anti-Cheat for CS2";
 
-        private static ILogger? logger = null;
-
         public override void Load(bool hotReload)
         {
-            Log($"[TBAC] Loading (hotReload: {hotReload})");
+            Globals.PreInit(this, Logger);
+            Globals.Log($"[TBAC] Loading (hotReload: {hotReload})");
 
-            logger = Logger;
-
-            Globals.PreInit(this);
             if (hotReload == true)
             {
                 Globals.Initialize(hotReload);
@@ -35,17 +30,7 @@ namespace TBAntiCheat.Core
 
             VirtualFuncs.Initialize();
 
-            Log($"[TBAC] Loaded (v{ModuleVersion})");
-        }
-
-        internal static void Log(string message)
-        {
-            if (logger == null)
-            {
-                return;
-            }
-
-            logger.Log(LogLevel.Information, message);
+            Globals.Log($"[TBAC] Loaded (v{ModuleVersion})");
         }
     }
 }

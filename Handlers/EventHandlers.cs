@@ -11,7 +11,7 @@ namespace TBAntiCheat.Handlers
         internal static void Initialize(BasePlugin plugin, bool hotReload)
         {
             plugin.RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull);
-            plugin.RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
+            plugin.RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect, HookMode.Pre);
 
             plugin.RegisterEventHandler<EventPlayerJump>(OnPlayerJump);
             plugin.RegisterEventHandler<EventPlayerHurt>(OnPlayerHurt);
@@ -79,7 +79,7 @@ namespace TBAntiCheat.Handlers
 
             BaseCaller.OnPlayerJoin(player);
 
-            ACCore.Log($"[TBAC] Initialized player with index {player.Index} (Pawn: {pawn.Index})");
+            ACCore.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
         }
 
         private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)
@@ -99,12 +99,22 @@ namespace TBAntiCheat.Handlers
             int properIndex = (int)controller.Index - 1;
             PlayerData player = Globals.Players[properIndex];
 
-            BaseCaller.OnPlayerLeave(player);
+            if (player != null)
+            {
+                BaseCaller.OnPlayerLeave(player);
+            }
+            else
+            {
+                ACCore.Log($"[TBAC] PlayerData is null! Report this to the dev. (Index: {properIndex})");
+            }
 
             Globals.Players[properIndex] = null!;
             Globals.PlayerReverseLookup[(int)pawn.Index] = -1;
 
-            ACCore.Log($"[TBAC] Disposed player with index {player.Index} (Pawn: {pawn.Index})");
+            if (player != null)
+            {
+                ACCore.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
+            }
 
             return HookResult.Continue;
         }

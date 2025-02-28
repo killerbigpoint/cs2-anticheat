@@ -13,22 +13,50 @@ namespace TBAntiCheat.Handlers
         {
             //VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(OnDamageTaken, HookMode.Post);
 
-            ACCore.Log($"[TBAC] VirtualFuncs Initialized");
+            Globals.Log($"[TBAC] VirtualFuncs Initialized");
         }
 
         private static HookResult OnDamageTaken(DynamicHook hook)
         {
-            CEntityInstance entityInfo = hook.GetParam<CEntityInstance>(0);
             CTakeDamageInfo damageInfo = hook.GetParam<CTakeDamageInfo>(1);
 
-            PlayerData victim = Globals.Players[entityInfo.Index];
-            PlayerData attacker = Globals.Players[damageInfo.Attacker.Index];
+            CBaseEntity? entity = damageInfo.Attacker.Value;
+            if (entity == null)
+            {
+                return HookResult.Continue;
+            }
 
-            Vector damagePosEngine = damageInfo.DamagePosition;
-            System.Numerics.Vector3 dmgPos = new System.Numerics.Vector3(damagePosEngine.X, damagePosEngine.Y, damagePosEngine.Z);
-            System.Numerics.Vector3 eyeAngle = new System.Numerics.Vector3(attacker.Pawn.EyeAngles.X, attacker.Pawn.EyeAngles.Y, attacker.Pawn.EyeAngles.Z);
+            int entityIndex = (int)entity.Index;
+            if (Globals.PlayerReverseLookup.ContainsKey(entityIndex) == false)
+            {
+                return HookResult.Continue;
+            }
 
-            Server.PrintToChatAll($"Damage Taken -> {attacker.Controller.PlayerName} -> {victim.Controller.PlayerName} | HitGroup: {damageInfo.GetHitGroup()} | DamagePosition: {dmgPos} | DamageDirection: {damageInfo.DamageDirection} | {eyeAngle}");
+            int properIndex = Globals.PlayerReverseLookup[entityIndex];
+            PlayerData player = Globals.Players[properIndex];
+
+            if (player == null)
+            {
+                return HookResult.Continue;
+            }
+
+            if (entity.AbsOrigin == null)
+            {
+                return HookResult.Continue;
+            }
+
+            Vector dmgPos = damageInfo.DamagePosition;
+            System.Numerics.Vector3 dmgPosition = new System.Numerics.Vector3(dmgPos.X, dmgPos.Y, dmgPos.Z);
+
+            Vector playerPos = entity.AbsOrigin;
+            System.Numerics.Vector3 playerPosition = new System.Numerics.Vector3(playerPos.X, playerPos.Y, playerPos.Z);
+
+            System.Numerics.Vector3 direction = dmgPosition - playerPosition;
+            System.Numerics.Vector3 directionNormalized = System.Numerics.Vector3.Normalize(direction);
+
+            System.Numerics.Vector3 eyeAngle = new System.Numerics.Vector3(player.Pawn.EyeAngles.X, player.Pawn.EyeAngles.Y, player.Pawn.EyeAngles.Z);
+
+            Server.PrintToChatAll($"Attacker -> {player.Controller.PlayerName} | DamagePosition: {dmgPosition} | PlayerPosition: {playerPosition}");
 
             return HookResult.Continue;
         }

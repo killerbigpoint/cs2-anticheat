@@ -113,7 +113,7 @@ namespace TBAntiCheat.Handlers
 
             if (player != null)
             {
-                Globals.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
+                Globals.Log($"[TBAC] Player left -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
             }
 
             return HookResult.Continue;

@@ -61,11 +61,6 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
-            if (player.IsPlayerValid() == false)
-            {
-                return;
-            }
-
             playerData[player.Index] = new PlayerAimbotData()
             {
                 eyeAngleHistory = new QAngle[aimbotMaxHistory],
@@ -78,11 +73,6 @@ namespace TBAntiCheat.Detections.Modules
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
             if (config.Config.DetectionEnabled == false)
-            {
-                return;
-            }
-
-            if (shooter.IsPlayerValid() == false)
             {
                 return;
             }
@@ -131,11 +121,6 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
-            if (player.IsPlayerValid() == false)
-            {
-                return;
-            }
-
             PlayerAimbotData aimbotData  = playerData[player.Index];
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
@@ -154,11 +139,6 @@ namespace TBAntiCheat.Detections.Modules
             foreach (PlayerData player in Globals.Players)
             {
                 if (player == null)
-                {
-                    continue;
-                }
-
-                if (player.IsPlayerValid() == false)
                 {
                     continue;
                 }

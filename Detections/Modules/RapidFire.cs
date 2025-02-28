@@ -31,12 +31,12 @@ namespace TBAntiCheat.Detections.Modules
         internal override ActionType ActionType => config.Config.DetectionAction;
 
         private readonly BaseConfig<RapidFireSaveData> config;
-        private readonly Dictionary<int, RapidFireData> playerData;
+        private readonly RapidFireData[] playerData;
 
         internal RapidFire() : base()
         {
             config = new BaseConfig<RapidFireSaveData>("RapidFire");
-            playerData = new Dictionary<int, RapidFireData>(Server.MaxPlayers);
+            playerData = new RapidFireData[Server.MaxPlayers];
 
             CommandHandler.RegisterCommand("tbac_rapidfire_enable", "Deactivates/Activates RapidFire detections", OnEnableCommand);
             CommandHandler.RegisterCommand("tbac_rapidfire_action", "Which action to take on the player. 0 = none | 1 = log | 2 = kick | 3 = ban", OnActionCommand);
@@ -46,11 +46,6 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
-            if (player.IsPlayerValid() == false)
-            {
-                return;
-            }
-
             playerData[player.Index] = new RapidFireData()
             {
                 lastBulletShotTick = 0,
@@ -61,11 +56,6 @@ namespace TBAntiCheat.Detections.Modules
         internal override void OnPlayerShoot(PlayerData player)
         {
             if (config.Config.DetectionEnabled == false)
-            {
-                return;
-            }
-
-            if (player.IsPlayerValid() == false)
             {
                 return;
             }

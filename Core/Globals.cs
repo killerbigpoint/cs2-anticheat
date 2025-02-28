@@ -11,26 +11,6 @@ namespace TBAntiCheat.Core
         internal required CCSPlayerPawn Pawn;
 
         internal required int Index;
-
-        internal bool IsPlayerValid()
-        {
-            if (Controller.IsValid == false)
-            {
-                return false;
-            }
-
-            if (Controller.IsHLTV == true)
-            {
-                return false;
-            }
-
-            if (Controller.IsBot == true)
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
 
     internal static class Globals

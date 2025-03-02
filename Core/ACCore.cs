@@ -28,7 +28,7 @@ namespace TBAntiCheat.Core
             EventListeners.Initialize(this);
             EventHandlers.Initialize(this, hotReload);
 
-            VirtualFuncs.Initialize();
+            UserMessagesHandler.Initialize();
 
             Globals.Log($"[TBAC] Loaded (v{ModuleVersion})");
         }

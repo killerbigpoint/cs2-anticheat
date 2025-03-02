@@ -2,7 +2,6 @@
 using CounterStrikeSharp.API.Core;
 using TBAntiCheat.Core;
 using TBAntiCheat.Detections;
-using TBAntiCheat.Utils;
 
 namespace TBAntiCheat.Handlers
 {
@@ -12,6 +11,7 @@ namespace TBAntiCheat.Handlers
         {
             plugin.RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull);
             plugin.RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect, HookMode.Pre);
+            plugin.RegisterEventHandler<EventPlayerActivate>(OnPlayerActivate);
 
             plugin.RegisterEventHandler<EventPlayerJump>(OnPlayerJump);
             plugin.RegisterEventHandler<EventPlayerHurt>(OnPlayerHurt);
@@ -22,99 +22,57 @@ namespace TBAntiCheat.Handlers
             plugin.RegisterEventHandler<EventRoundStart>(OnRoundStart);
             plugin.RegisterEventHandler<EventRoundEnd>(OnRoundEnd);
 
+            Globals.Log($"[TBAC] EventHandlers Initialized");
+
             if (hotReload == true)
             {
-                foreach (CCSPlayerController controller in Utilities.GetPlayers())
+                for (int i = 0; i < Server.MaxPlayers; i++)
                 {
-                    JoinPlayerImpl(controller);
+                    CCSPlayerController? controller = Utilities.GetPlayerFromSlot(i);
+                    if (controller == null || controller.IsValid == false)
+                    {
+                        continue;
+                    }
+
+                    if (controller.Connected != PlayerConnectedState.PlayerConnected)
+                    {
+                        continue;
+                    }
+
+                    OnPlayerJoined(controller);
                 }
             }
-
-            Globals.Log($"[TBAC] EventHandlers Initialized");
         }
 
-        private static HookResult OnPlayerConnectFull(EventPlayerConnectFull connectEvent, GameEventInfo _)
+        private static HookResult OnPlayerActivate(EventPlayerActivate activateEvent, GameEventInfo _)
         {
-            CCSPlayerController? controller = connectEvent.Userid;
-            if (controller == null || controller.IsValid == false || controller.IsBot == true)
+            CCSPlayerController? controller = activateEvent.Userid;
+            if (controller == null || controller.IsValid == false)
             {
                 return HookResult.Continue;
             }
 
-            JoinPlayerImpl(controller);
+            if (controller.IsBot == false)
+            {
+                return HookResult.Continue;
+            }
+
+            Globals.Log($"[TBAC] Bot activated -> {controller.Slot} | {controller.PlayerName}");
+            OnPlayerJoined(controller);
 
             return HookResult.Continue;
         }
 
-        private static void JoinPlayerImpl(CCSPlayerController controller)
+        private static HookResult OnPlayerConnectFull(EventPlayerConnectFull connectEvent, GameEventInfo _)
         {
-            CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
-            if (pawn == null)
-            {
-                return;
-            }
+            OnPlayerJoined(connectEvent.Userid);
 
-            // We need to subtract 1 here because player indexes always start at 1.
-            // This is because the world also has an entity index which is 0.
-            // So to properly use arrays we need to pretend the indexes are 1 less
-            int properIndex = (int)controller.Index - 1;
-            PlayerData player = new PlayerData()
-            {
-                Controller = controller,
-                Pawn = pawn,
-
-                Index = properIndex
-            };
-
-            if (BanHandler.IsPlayerBanned(player) == true)
-            {
-                string reason = BanHandler.GetBanReason(player);
-                PlayerUtils.KickPlayer(player, reason);
-
-                return;
-            }
-
-            Globals.Players[properIndex] = player;
-            Globals.PlayerReverseLookup[(int)pawn.Index] = properIndex;
-
-            BaseCaller.OnPlayerJoin(player);
-
-            Globals.Log($"[TBAC] Player joined -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
+            return HookResult.Continue;
         }
 
-        private static HookResult OnPlayerDisconnect(EventPlayerDisconnect connectEvent, GameEventInfo _)
+        private static HookResult OnPlayerDisconnect(EventPlayerDisconnect disconnectEvent, GameEventInfo _)
         {
-            CCSPlayerController? controller = connectEvent.Userid;
-            if (controller == null || controller.IsValid == false || controller.IsBot == true)
-            {
-                return HookResult.Continue;
-            }
-
-            CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
-            if (pawn == null)
-            {
-                return HookResult.Continue;
-            }
-
-            int properIndex = (int)controller.Index - 1;
-            PlayerData player = Globals.Players[properIndex];
-
-            if (player != null)
-            {
-                BaseCaller.OnPlayerLeave(player);
-            }
-            else
-            {
-                Globals.Log($"[TBAC] PlayerData is null! Report this to the dev. (Index: {properIndex})");
-            }
-
-            Globals.Players[properIndex] = null!;
-            Globals.PlayerReverseLookup[(int)pawn.Index] = -1;
-
-            if (player != null)
-            {
-                Globals.Log($"[TBAC] Player left -> {player.Controller.PlayerName} (SteamID: {player.Controller.AuthorizedSteamID?.SteamId2} | Index: {player.Index})");
-            }
+            OnPlayerLeft(disconnectEvent.Userid);
 
             return HookResult.Continue;
         }
@@ -122,14 +80,12 @@ namespace TBAntiCheat.Handlers
         private static HookResult OnPlayerJump(EventPlayerJump jumpEvent, GameEventInfo _)
         {
             CCSPlayerController? controller = jumpEvent.Userid;
-            if (controller == null || controller.IsValid == false || controller.IsBot == true)
+            if (controller == null || controller.IsValid == false)
             {
                 return HookResult.Continue;
             }
 
-            int properIndex = (int)controller.Index - 1;
-            PlayerData player = Globals.Players[properIndex];
-
+            PlayerData player = Globals.Players[controller.Slot];
             BaseCaller.OnPlayerJump(player);
 
             return HookResult.Continue;
@@ -140,17 +96,14 @@ namespace TBAntiCheat.Handlers
             CCSPlayerController? victimController = hurtEvent.Userid;
             CCSPlayerController? shooterController = hurtEvent.Attacker;
 
-            if (victimController == null || victimController.IsValid == false || victimController.IsBot == true ||
-                shooterController == null || shooterController.IsValid == false || shooterController.IsBot == true)
+            if (victimController == null || victimController.IsValid == false ||
+                shooterController == null || shooterController.IsValid == false)
             {
                 return HookResult.Continue;
             }
 
-            int properIndexVictim = (int)victimController.Index - 1;
-            int properIndexShooter = (int)shooterController.Index - 1;
-
-            PlayerData victim = Globals.Players[properIndexVictim];
-            PlayerData shooter = Globals.Players[properIndexShooter];
+            PlayerData victim = Globals.Players[victimController.Slot];
+            PlayerData shooter = Globals.Players[shooterController.Slot];
 
             BaseCaller.OnPlayerHurt(victim, shooter, (HitGroup_t)hurtEvent.Hitgroup);
 
@@ -162,17 +115,14 @@ namespace TBAntiCheat.Handlers
             CCSPlayerController? victimController = deathEvent.Userid;
             CCSPlayerController? shooterController = deathEvent.Attacker;
 
-            if (victimController == null || victimController.IsValid == false || victimController.IsBot == true ||
-                shooterController == null || shooterController.IsValid == false || shooterController.IsBot == true)
+            if (victimController == null || victimController.IsValid == false ||
+                shooterController == null || shooterController.IsValid == false)
             {
                 return HookResult.Continue;
             }
 
-            int properIndexVictim = (int)victimController.Index - 1;
-            int properIndexShooter = (int)shooterController.Index - 1;
-
-            PlayerData victim = Globals.Players[properIndexVictim];
-            PlayerData shooter = Globals.Players[properIndexShooter];
+            PlayerData victim = Globals.Players[victimController.Slot];
+            PlayerData shooter = Globals.Players[shooterController.Slot];
 
             if (victim == null || shooter == null)
             {
@@ -187,14 +137,12 @@ namespace TBAntiCheat.Handlers
         private static HookResult OnWeaponFire(EventWeaponFire shootEvent, GameEventInfo _)
         {
             CCSPlayerController? controller = shootEvent.Userid;
-            if (controller == null || controller.IsValid == false || controller.IsBot == true)
+            if (controller == null || controller.IsValid == false)
             {
                 return HookResult.Continue;
             }
 
-            int properIndex = (int)controller.Index - 1;
-            PlayerData shooter = Globals.Players[properIndex];
-
+            PlayerData shooter = Globals.Players[controller.Slot];
             BaseCaller.OnPlayerShoot(shooter);
 
             return HookResult.Continue;
@@ -212,6 +160,63 @@ namespace TBAntiCheat.Handlers
             BaseCaller.OnRoundEnd();
 
             return HookResult.Continue;
+        }
+
+        // ----- Helper Functions ----- \\
+
+        private static void OnPlayerJoined(CCSPlayerController? controller)
+        {
+            if (controller == null || controller.IsValid == false)
+            {
+                Globals.Log($"[TBAC] WARNING: Controller is invalid when player joined");
+                return;
+            }
+
+            CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
+            if (pawn == null)
+            {
+                Globals.Log($"[TBAC] WARNING: Pawn is invalid when player joined");
+                return;
+            }
+
+            int playerIndex = controller.Slot;
+            PlayerData player = new PlayerData()
+            {
+                Controller = controller,
+                Pawn = pawn,
+
+                Index = playerIndex,
+                IsBot = controller.IsBot
+            };
+
+            Globals.Players[playerIndex] = player;
+            BaseCaller.OnPlayerJoin(player);
+
+            Globals.Log($"[TBAC] Player joined -> {playerIndex} | {controller.PlayerName}");
+        }
+
+        private static void OnPlayerLeft(CCSPlayerController? controller)
+        {
+            if (controller == null || controller.IsValid == false)
+            {
+                Globals.Log($"[TBAC] WARNING: Controller is invalid when player left");
+                return;
+            }
+
+            CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
+            if (pawn == null)
+            {
+                Globals.Log($"[TBAC] WARNING: Pawn is invalid when player left");
+                return;
+            }
+
+            int playerIndex = controller.Slot;
+            PlayerData player = Globals.Players[playerIndex];
+
+            BaseCaller.OnPlayerLeave(player);
+            Globals.Players[playerIndex] = null!;
+
+            Globals.Log($"[TBAC] Player left -> {playerIndex} | {controller.PlayerName}");
         }
     }
 }

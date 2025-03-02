@@ -12,6 +12,7 @@ namespace TBAntiCheat.Core
         internal required CCSPlayerPawn Pawn;
 
         internal required int Index;
+        internal required bool IsBot;
     }
 
     internal static class Globals
@@ -22,8 +23,6 @@ namespace TBAntiCheat.Core
         private static ILogger? logger = null;
 
         internal static PlayerData[] Players = [];
-        internal static Dictionary<int, int> PlayerReverseLookup = []; // Use when trying to figure out which Pawn belongs to what Controller
-
         internal static BaseDetection[] Detections = [];
 
         internal static void PreInit(ACCore core, ILogger log)
@@ -42,12 +41,6 @@ namespace TBAntiCheat.Core
             Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
             Players = new PlayerData[Server.MaxPlayers];
-            PlayerReverseLookup = new Dictionary<int, int>(Server.MaxPlayers);
-            for (int i = 0; i < PlayerReverseLookup.Count; i++)
-            {
-                PlayerReverseLookup[i] = -1;
-            }
-
             Detections =
             [
                 new Aimbot(),

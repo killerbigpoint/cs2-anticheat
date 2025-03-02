@@ -3,6 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
 using CounterStrikeSharp.API.Modules.Utils;
+using System.Numerics;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
 
@@ -19,7 +20,7 @@ namespace TBAntiCheat.Detections.Modules
 
     internal class PlayerAimbotData
     {
-        internal required QAngle[] eyeAngleHistory;
+        internal required Vector3[] eyeAngleHistory;
         internal required int historyIndex;
 
         internal required int detections;
@@ -62,7 +63,7 @@ namespace TBAntiCheat.Detections.Modules
         {
             playerData[player.Index] = new PlayerAimbotData()
             {
-                eyeAngleHistory = new QAngle[aimbotMaxHistory],
+                eyeAngleHistory = new Vector3[aimbotMaxHistory],
                 historyIndex = 0,
 
                 detections = 0
@@ -79,7 +80,7 @@ namespace TBAntiCheat.Detections.Modules
             PlayerAimbotData aimbotData = playerData[shooter.Index];
 
             int historyIndex = aimbotData.historyIndex;
-            QAngle lastAngle = aimbotData.eyeAngleHistory[historyIndex];
+            Vector3 lastAngle = aimbotData.eyeAngleHistory[historyIndex];
 
             float maxAngle = config.Config.MaxAimbotAngle;
 
@@ -91,7 +92,7 @@ namespace TBAntiCheat.Detections.Modules
                     historyIndex = 0;
                 }
 
-                QAngle currentAngle = aimbotData.eyeAngleHistory[historyIndex];
+                Vector3 currentAngle = aimbotData.eyeAngleHistory[historyIndex];
                 float angleDiff = Distance(lastAngle, currentAngle);
 
                 //Normalize the angle so we can use it for our aimbot detection logic
@@ -123,8 +124,7 @@ namespace TBAntiCheat.Detections.Modules
             PlayerAimbotData aimbotData  = playerData[player.Index];
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
-            QAngle snapshot = new QAngle(eyeAngles.X, eyeAngles.Y, eyeAngles.Z);
-            aimbotData.eyeAngleHistory[aimbotData.historyIndex] = snapshot;
+            aimbotData.eyeAngleHistory[aimbotData.historyIndex] = new Vector3(eyeAngles.X, eyeAngles.Y, eyeAngles.Z);
 
             aimbotData.historyIndex++;
             if (aimbotData.historyIndex == aimbotMaxHistory)
@@ -245,7 +245,7 @@ namespace TBAntiCheat.Detections.Modules
 
         // ----- Helper Functions ----- \\
 
-        public static float Distance(QAngle a, QAngle b)
+        public static float Distance(Vector3 a, Vector3 b)
         {
             float newX = a.X - b.X;
             float newY = a.Y - b.Y;

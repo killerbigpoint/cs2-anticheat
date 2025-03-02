@@ -56,14 +56,6 @@ namespace TBAntiCheat.Detections.Modules
             playerData[player.Index] = null!;
         }
 
-        internal override void OnPlayerShoot(PlayerData player)
-        {
-            PlayerFlags flags = (PlayerFlags)player.Pawn.Flags;
-            bool onGround = flags.HasFlag(PlayerFlags.FL_ONGROUND);
-
-            //Server.PrintToChatAll($"{player.Controller.PlayerName} | FL_ONGROUND -> {onGround}");
-        }
-
         internal override void OnPlayerJump(PlayerData player)
         {
             //Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");

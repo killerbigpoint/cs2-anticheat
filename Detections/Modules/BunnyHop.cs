@@ -51,12 +51,7 @@ namespace TBAntiCheat.Detections.Modules
             };
         }
 
-        internal override void OnPlayerLeave(PlayerData player)
-        {
-            playerData[player.Index] = null!;
-        }
-
-        internal override void OnPlayerJump(PlayerData player)
+        /*internal override void OnPlayerJump(PlayerData player)
         {
             //Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
         }
@@ -70,7 +65,7 @@ namespace TBAntiCheat.Detections.Modules
             {
                 //Server.PrintToChatAll($"{player.Controller.PlayerName} -> Jumped");
             }
-        }
+        }*/
 
         // ----- Commands ----- \\
 

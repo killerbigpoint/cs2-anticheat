@@ -45,6 +45,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
+            if (player.IsBot == true)
+            {
+                return;
+            }
+
             playerData[player.Index] = new BunnyHopData()
             {
                 perfectBhops = 0

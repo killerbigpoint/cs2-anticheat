@@ -61,6 +61,11 @@ namespace TBAntiCheat.Detections.Modules
 
         internal override void OnPlayerJoin(PlayerData player)
         {
+            if (player.IsBot == true)
+            {
+                return;
+            }
+
             playerData[player.Index] = new PlayerAimbotData()
             {
                 eyeAngleHistory = new Vector3[aimbotMaxHistory],
@@ -121,6 +126,11 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
+            if (player.IsBot == true)
+            {
+                return;
+            }
+
             PlayerAimbotData aimbotData  = playerData[player.Index];
 
             QAngle eyeAngles = player.Pawn.EyeAngles;
@@ -138,6 +148,11 @@ namespace TBAntiCheat.Detections.Modules
             foreach (PlayerData player in Globals.Players)
             {
                 if (player == null)
+                {
+                    continue;
+                }
+
+                if (player.IsBot == true)
                 {
                     continue;
                 }

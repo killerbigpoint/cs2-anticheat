@@ -41,6 +41,11 @@ namespace TBAntiCheat.Detections.Modules
                 return;
             }
 
+            if (player.IsBot == true)
+            {
+                return;
+            }
+
             QAngle eyeAngles = player.Pawn.EyeAngles;
             float pitch = eyeAngles.X;
             float yaw = eyeAngles.Y;

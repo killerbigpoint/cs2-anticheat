@@ -22,6 +22,8 @@ namespace TBAntiCheat.Handlers
             plugin.RegisterEventHandler<EventRoundStart>(OnRoundStart);
             plugin.RegisterEventHandler<EventRoundEnd>(OnRoundEnd);
 
+            plugin.RegisterEventHandler<EventMapTransition>(OnMapChange);
+
             Globals.Log($"[TBAC] EventHandlers Initialized");
 
             if (hotReload == true)
@@ -158,6 +160,13 @@ namespace TBAntiCheat.Handlers
         private static HookResult OnRoundEnd(EventRoundEnd roundEndEvent, GameEventInfo _)
         {
             BaseCaller.OnRoundEnd();
+
+            return HookResult.Continue;
+        }
+
+        private static HookResult OnMapChange(EventMapTransition mapChangeEvent, GameEventInfo _)
+        {
+            Globals.Log("[TBAC] OnMapChange");
 
             return HookResult.Continue;
         }

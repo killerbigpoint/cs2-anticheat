@@ -175,7 +175,7 @@ namespace TBAntiCheat.Handlers
             CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
             if (pawn == null)
             {
-                Globals.Log($"[TBAC] WARNING: Pawn is invalid when player joined");
+                Globals.Log($"[TBAC] WARNING: Pawn is invalid when player ({controller.PlayerName}) joined");
                 return;
             }
 
@@ -206,8 +206,7 @@ namespace TBAntiCheat.Handlers
             CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
             if (pawn == null)
             {
-                Globals.Log($"[TBAC] WARNING: Pawn is invalid when player left");
-                return;
+                Globals.Log($"[TBAC] WARNING: Pawn is invalid when player ({controller.PlayerName}) left");
             }
 
             int playerIndex = controller.Slot;

@@ -33,6 +33,7 @@ namespace TBAntiCheat.Core
 
         internal static void Initialize(bool forceReinitialize)
         {
+            Players = new PlayerData[Server.MaxPlayers];
             if (initializedOnce == true && forceReinitialize == false)
             {
                 return;
@@ -40,7 +41,6 @@ namespace TBAntiCheat.Core
 
             Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
-            Players = new PlayerData[Server.MaxPlayers];
             Detections =
             [
                 new Aimbot(),

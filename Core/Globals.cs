@@ -1,5 +1,6 @@
 ﻿using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.ValveConstants.Protobuf;
 using Microsoft.Extensions.Logging;
 using TBAntiCheat.Detections;
 using TBAntiCheat.Detections.Modules;
@@ -32,6 +33,11 @@ namespace TBAntiCheat.Core
             }
 
             return new CCSWeaponBaseGun(weaponBase.Handle);
+        }
+
+        internal void Disconnect(NetworkDisconnectionReason reason)
+        {
+            Controller.Disconnect(reason);
         }
     }
 

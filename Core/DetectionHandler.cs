@@ -1,6 +1,6 @@
 ﻿using Discord.Webhook;
 using TBAntiCheat.Detections;
-using TBAntiCheat.Utils;
+using CounterStrikeSharp.API.ValveConstants.Protobuf;
 
 namespace TBAntiCheat.Core
 {
@@ -36,7 +36,8 @@ namespace TBAntiCheat.Core
                 case ActionType.Kick:
                 {
                     Globals.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.module.Name} ({metadata.reason})");
-                    PlayerUtils.KickPlayer(metadata.player, $"Kicked for usage of {metadata.module.Name}");
+
+                    metadata.player.Disconnect(NetworkDisconnectionReason.NETWORK_DISCONNECT_DISCONNECT_BY_SERVER);
 
                     break;
                 }
@@ -46,7 +47,7 @@ namespace TBAntiCheat.Core
                     Globals.Log($"[TBAC] {metadata.player.Controller.PlayerName} was kicked for using {metadata.module.Name} ({metadata.reason})");
 
                     BanHandler.BanPlayer(metadata.player, $"Kicked for usage of {metadata.module.Name}");
-                    PlayerUtils.KickPlayer(metadata.player, $"Kicked for usage of {metadata.module.Name}");
+                    metadata.player.Disconnect(NetworkDisconnectionReason.NETWORK_DISCONNECT_DISCONNECT_BY_SERVER);
 
                     break;
                 }

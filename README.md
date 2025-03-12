@@ -1,5 +1,5 @@
 # CS2 Anti-Cheat / TB Anti-Cheat
-Anticheat plugin for Counter-Strike 2 based on [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp). It is heavily inspired by [SourceMod Anti-Cheat](https://github.com/Silenci0/SMAC). It is currently in heavy development.
+Anticheat plugin for Counter-Strike 2 based on [CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp). It is heavily inspired by [SourceMod Anti-Cheat](https://github.com/Silenci0/SMAC). Currently in heavy development.
 
 ## Features / Roadmap
 ### Core

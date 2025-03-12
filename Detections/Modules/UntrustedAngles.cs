@@ -17,10 +17,11 @@ namespace TBAntiCheat.Detections.Modules
      * Module: Untrusted Angles
      * Purpose: Detect players which use eye angles that are outside the normal limit
      */
-    internal class UntrustedAngles : BaseDetection
+    internal class UntrustedAngles : BaseModule
     {
         internal override string Name => "UntrustedAngles";
         internal override ActionType ActionType => config.Config.DetectionAction;
+        internal override bool AlertDiscord => false;
 
         private readonly BaseConfig<UntrustedAnglesSaveData> config;
 

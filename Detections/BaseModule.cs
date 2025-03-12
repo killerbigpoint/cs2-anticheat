@@ -11,18 +11,19 @@ namespace TBAntiCheat.Detections
         Ban = 3
     }
 
-    internal abstract class BaseDetection
+    internal abstract class BaseModule
     {
-        internal BaseDetection() { }
+        internal BaseModule() { }
 
         internal abstract string Name { get; }
         internal abstract ActionType ActionType { get; }
+        internal abstract bool AlertDiscord { get; }
 
         protected void OnPlayerDetected(PlayerData player, string reason)
         {
             DetectionMetadata metadata = new DetectionMetadata()
             {
-                detection = this,
+                module = this,
                 player = player,
                 time = DateTime.Now,
                 reason = reason

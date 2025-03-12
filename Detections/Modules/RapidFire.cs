@@ -25,10 +25,11 @@ namespace TBAntiCheat.Detections.Modules
      * Purpose: Detect rapid fire where weapons can fire at speeds that are not normal, either within the same tick or the ticks after
      * NOTE: This is not production ready. It needs a lot of testing so keep that in mind when using this
      */
-    internal class RapidFire : BaseDetection
+    internal class RapidFire : BaseModule
     {
         internal override string Name => "RapidFire";
         internal override ActionType ActionType => config.Config.DetectionAction;
+        internal override bool AlertDiscord => false;
 
         private readonly BaseConfig<RapidFireSaveData> config;
         private readonly RapidFireData[] playerData;

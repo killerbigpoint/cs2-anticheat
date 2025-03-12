@@ -7,150 +7,150 @@ namespace TBAntiCheat.Detections
     {
         internal static void OnPlayerJoin(PlayerData player)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerJoin(player);
+                    module.OnPlayerJoin(player);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnPlayerLeave(PlayerData player)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerLeave(player);
+                    module.OnPlayerLeave(player);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnPlayerJump(PlayerData player)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerJump(player);
+                    module.OnPlayerJump(player);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnPlayerHurt(PlayerData victim, PlayerData shooter, HitGroup_t hitgroup)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerHurt(victim, shooter, hitgroup);
+                    module.OnPlayerHurt(victim, shooter, hitgroup);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerDead(victim, shooter);
+                    module.OnPlayerDead(victim, shooter);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnPlayerShoot(PlayerData player)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerShoot(player);
+                    module.OnPlayerShoot(player);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnPlayerTick(PlayerData player)
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnPlayerTick(player);
+                    module.OnPlayerTick(player);
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnRoundStart()
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnRoundStart();
+                    module.OnRoundStart();
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnRoundEnd()
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnRoundEnd();
+                    module.OnRoundEnd();
                 }
                 catch (Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }
 
         internal static void OnGameTick()
         {
-            foreach (BaseDetection detection in Globals.Detections)
+            foreach (BaseModule module in Globals.Modules)
             {
                 try
                 {
-                    detection.OnGameTick();
+                    module.OnGameTick();
                 }
                 catch(Exception e)
                 {
-                    Globals.Log($"[TBAC] Exception in {detection.Name} -> {e.Message} | {e.StackTrace}");
+                    Globals.Log($"[TBAC] Exception in {module.Name} -> {e.Message} | {e.StackTrace}");
                 }
             }
         }

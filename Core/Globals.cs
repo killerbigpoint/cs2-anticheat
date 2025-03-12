@@ -23,7 +23,7 @@ namespace TBAntiCheat.Core
         private static ILogger? logger = null;
 
         internal static PlayerData[] Players = [];
-        internal static BaseDetection[] Detections = [];
+        internal static BaseModule[] Modules = [];
 
         internal static void PreInit(ACCore core, ILogger log)
         {
@@ -41,7 +41,7 @@ namespace TBAntiCheat.Core
 
             Log($"[TBAC] Globals Initializing (forced: {forceReinitialize})");
 
-            Detections =
+            Modules =
             [
                 new Aimbot(),
                 //new Backtrack(),

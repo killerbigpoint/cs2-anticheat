@@ -36,8 +36,12 @@ namespace TBAntiCheat.Detections.Modules
      * Purpose: Detect players which flick with their eye angles at high velocity. Nobody can reliably flick 20+ degrees in a single tick and still hit players
      * NOTE: For some reason EyeAngles is not properly synched from client to server I think? Either way this module will always be unreliable against rage hackers
      */
-    internal class Aimbot : BaseDetection
+    internal class Aimbot : BaseModule
     {
+        internal override string Name => "Aimbot";
+        internal override ActionType ActionType => config.Config.DetectionAction;
+        internal override bool AlertDiscord => false;
+
         private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)
 
         private readonly BaseConfig<AimbotSaveData> config;
@@ -55,9 +59,6 @@ namespace TBAntiCheat.Detections.Modules
 
             Globals.Log($"[TBAC] Aimbot Initialized");
         }
-
-        internal override string Name => "Aimbot";
-        internal override ActionType ActionType => config.Config.DetectionAction;
 
         internal override void OnPlayerJoin(PlayerData player)
         {

@@ -24,10 +24,11 @@ namespace TBAntiCheat.Detections.Modules
      * Purpose: Detect players that does tick perfect bunny hops over and over again
      * NOTE: Not production ready. Needs testing
      */
-    internal class BunnyHop : BaseDetection
+    internal class BunnyHop : BaseModule
     {
         internal override string Name => "BunnyHop";
         internal override ActionType ActionType => config.Config.DetectionAction;
+        internal override bool AlertDiscord => false;
 
         private readonly BaseConfig<BunnyHopSaveData> config;
         private readonly BunnyHopData[] playerData;

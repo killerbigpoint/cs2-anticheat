@@ -18,14 +18,9 @@ namespace TBAntiCheat.Handlers
         private static void OnMapStart(string mapName)
         {
             Globals.Initialize(false);
-
-            Globals.Log($"[TBAC] OnMapStart");
         }
 
-        private static void OnMapEnd()
-        {
-            Globals.Log($"[TBAC] OnMapEnd");
-        }
+        private static void OnMapEnd() { }
 
         private static void OnGameTick()
         {

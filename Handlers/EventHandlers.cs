@@ -203,13 +203,19 @@ namespace TBAntiCheat.Handlers
                 return;
             }
 
+            int playerIndex = controller.Slot;
+            if (Globals.Players[playerIndex] == null)
+            {
+                Globals.Log($"[TBAC] WARNING: Player ({controller.PlayerName}) has already left but left again?");
+                return;
+            }
+
             CCSPlayerPawn? pawn = controller.PlayerPawn.Value;
             if (pawn == null)
             {
                 Globals.Log($"[TBAC] WARNING: Pawn is invalid when player ({controller.PlayerName}) left");
             }
 
-            int playerIndex = controller.Slot;
             PlayerData player = Globals.Players[playerIndex];
 
             BaseCaller.OnPlayerLeave(player);

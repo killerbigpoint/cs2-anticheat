@@ -2,6 +2,7 @@
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Entities;
 using CounterStrikeSharp.API.Modules.Utils;
 using System.Numerics;
 using TBAntiCheat.Core;
@@ -80,6 +81,11 @@ namespace TBAntiCheat.Detections.Modules
         internal override void OnPlayerDead(PlayerData victim, PlayerData shooter)
         {
             if (config.Config.DetectionEnabled == false)
+            {
+                return;
+            }
+
+            if (shooter.IsBot == true)
             {
                 return;
             }

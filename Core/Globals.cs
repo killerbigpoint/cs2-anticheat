@@ -13,6 +13,26 @@ namespace TBAntiCheat.Core
 
         internal required int Index;
         internal required bool IsBot;
+
+        internal string PlayerName => Controller.PlayerName;
+        internal string SteamID => Controller.AuthorizedSteamID?.SteamId2 ?? "Invalid SteamID";
+
+        internal CCSWeaponBaseGun GetWeapon()
+        {
+            CPlayer_WeaponServices? weaponServices = Pawn.WeaponServices;
+            if (weaponServices == null)
+            {
+                return null!;
+            }
+
+            CBasePlayerWeapon? weaponBase = weaponServices.ActiveWeapon.Value;
+            if (weaponBase == null)
+            {
+                return null!;
+            }
+
+            return new CCSWeaponBaseGun(weaponBase.Handle);
+        }
     }
 
     internal static class Globals

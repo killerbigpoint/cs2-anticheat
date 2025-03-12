@@ -11,6 +11,7 @@ namespace TBAntiCheat.Detections.Modules
     {
         public bool DetectionEnabled { get; set; } = true;
         public ActionType DetectionAction { get; set; } = ActionType.Kick;
+        public bool AlertDiscord { get; set; } = false;
     }
 
     /*
@@ -21,7 +22,7 @@ namespace TBAntiCheat.Detections.Modules
     {
         internal override string Name => "UntrustedAngles";
         internal override ActionType ActionType => config.Config.DetectionAction;
-        internal override bool AlertDiscord => false;
+        internal override bool AlertDiscord => config.Config.AlertDiscord;
 
         private readonly BaseConfig<UntrustedAnglesSaveData> config;
 

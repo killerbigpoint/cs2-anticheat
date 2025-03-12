@@ -17,6 +17,8 @@ namespace TBAntiCheat.Core
             Globals.PreInit(this, Logger);
             Globals.Log($"[TBAC] Loading (hotReload: {hotReload})");
 
+            GeneralConfig.Initialize();
+
             if (hotReload == true)
             {
                 Globals.Initialize(hotReload);

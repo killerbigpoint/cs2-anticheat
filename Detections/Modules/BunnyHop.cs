@@ -2,7 +2,6 @@ using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
-using CounterStrikeSharp.API.Modules.Utils;
 using TBAntiCheat.Core;
 using TBAntiCheat.Handlers;
 
@@ -12,6 +11,7 @@ namespace TBAntiCheat.Detections.Modules
     {
         public bool DetectionEnabled { get; set; } = true;
         public ActionType DetectionAction { get; set; } = ActionType.Log;
+        public bool AlertDiscord { get; set; } = false;
     }
 
     internal class BunnyHopData
@@ -28,7 +28,7 @@ namespace TBAntiCheat.Detections.Modules
     {
         internal override string Name => "BunnyHop";
         internal override ActionType ActionType => config.Config.DetectionAction;
-        internal override bool AlertDiscord => false;
+        internal override bool AlertDiscord => config.Config.AlertDiscord;
 
         private readonly BaseConfig<BunnyHopSaveData> config;
         private readonly BunnyHopData[] playerData;

@@ -1,4 +1,5 @@
-﻿using TBAntiCheat.Detections;
+﻿using Discord.Webhook;
+using TBAntiCheat.Detections;
 using TBAntiCheat.Utils;
 
 namespace TBAntiCheat.Core
@@ -13,8 +14,15 @@ namespace TBAntiCheat.Core
 
     internal static class DetectionHandler
     {
+        private static DiscordWebhookClient webClient = null!;
+
         internal static void OnPlayerDetected(DetectionMetadata metadata)
         {
+            if (metadata.module.AlertDiscord == true)
+            {
+                SendWebhook(metadata);
+            }
+
             switch (metadata.module.ActionType)
             {
                 case ActionType.None: { return; }
@@ -43,6 +51,34 @@ namespace TBAntiCheat.Core
                     break;
                 }
             }
+        }
+
+        internal static async void SendWebhook(DetectionMetadata metadata)
+        {
+            if (webClient == null)
+            {
+                ulong id = GeneralConfig.GetGeneralConfig().Config.DiscordWebhookID;
+                string token = GeneralConfig.GetGeneralConfig().Config.DiscordWebhookToken;
+
+                if (id == 0 || string.IsNullOrEmpty(token) == true)
+                {
+                    Globals.Log("[TBAC] Can't send webhook message when 'id' or 'token' is not set!");
+                    return;
+                }
+
+                webClient = new DiscordWebhookClient(id, token);
+            }
+
+            string content = $"**----- CHEATER DETECTED -----**\n```" +
+                $"Detection: {metadata.module.Name}\n" +
+                $"Weapon: {metadata.player.GetWeapon().DesignerName}\n" +
+                $"Info: {metadata.reason}\n\n" +
+                $"Name: {metadata.player.PlayerName}\n" +
+                $"SteamID: {metadata.player.SteamID}\n" +
+                $"Time: {metadata.time}" +
+                $"```";
+
+            await webClient.SendMessageAsync(content);
         }
     }
 }

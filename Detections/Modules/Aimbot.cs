@@ -13,6 +13,7 @@ namespace TBAntiCheat.Detections.Modules
     {
         public bool DetectionEnabled { get; set; } = true;
         public ActionType DetectionAction { get; set; } = ActionType.Kick;
+        public bool AlertDiscord { get; set; } = false;
 
         public float MaxAimbotAngle { get; set; } = 30f;
         public int MaxDetectionsBeforeAction { get; set; } = 2;
@@ -40,7 +41,7 @@ namespace TBAntiCheat.Detections.Modules
     {
         internal override string Name => "Aimbot";
         internal override ActionType ActionType => config.Config.DetectionAction;
-        internal override bool AlertDiscord => false;
+        internal override bool AlertDiscord => config.Config.AlertDiscord;
 
         private const int aimbotMaxHistory = 64; //1 entire second worth of history (considering the tickrate is 64)
 
@@ -168,7 +169,7 @@ namespace TBAntiCheat.Detections.Modules
             int maxDetections = config.Config.MaxDetectionsBeforeAction;
 
             data.detections++;
-            Globals.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections)");
+            Globals.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections) | weapon: {player.GetWeapon().DesignerName}");
 
             if (data.detections < maxDetections)
             {

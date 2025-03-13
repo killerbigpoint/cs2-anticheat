@@ -206,7 +206,6 @@ namespace TBAntiCheat.Handlers
             int playerIndex = controller.Slot;
             if (Globals.Players[playerIndex] == null)
             {
-                Globals.Log($"[TBAC] WARNING: Player ({controller.PlayerName}) has already left but left again?");
                 return;
             }
 

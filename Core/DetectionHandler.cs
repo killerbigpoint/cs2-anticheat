@@ -1,6 +1,6 @@
-﻿using Discord.Webhook;
+﻿using CounterStrikeSharp.API.ValveConstants.Protobuf;
 using TBAntiCheat.Detections;
-using CounterStrikeSharp.API.ValveConstants.Protobuf;
+using System.Text.Json;
 
 namespace TBAntiCheat.Core
 {
@@ -12,9 +12,17 @@ namespace TBAntiCheat.Core
         internal string reason;
     }
 
+    public class WebhookData
+    {
+        public string username { get; set; } = string.Empty;
+        public string content { get; set; } = string.Empty;
+    }
+
     internal static class DetectionHandler
     {
-        private static DiscordWebhookClient webClient = null!;
+        private static HttpClient webClient = null!;
+        private static string webClientAddress = string.Empty;
+        private static WebhookData webClientData = null!;
 
         internal static void OnPlayerDetected(DetectionMetadata metadata)
         {
@@ -67,10 +75,14 @@ namespace TBAntiCheat.Core
                     return;
                 }
 
-                webClient = new DiscordWebhookClient(id, token);
+                webClient = new HttpClient();
+                webClientAddress = $"https://discordapp.com/api/webhooks/{id}/{token}";
+
+                webClientData = new WebhookData();
+                webClientData.username = "TB Anti-Cheat";
             }
 
-            string content = $"**----- CHEATER DETECTED -----**\n```" +
+            webClientData.content = $"**----- CHEATER DETECTED -----**\n```" +
                 $"Detection: {metadata.module.Name}\n" +
                 $"Weapon: {metadata.player.GetWeapon().DesignerName}\n" +
                 $"Info: {metadata.reason}\n\n" +
@@ -79,7 +91,10 @@ namespace TBAntiCheat.Core
                 $"Time: {metadata.time}" +
                 $"```";
 
-            await webClient.SendMessageAsync(content);
+            string contentJson = JsonSerializer.Serialize(webClientData);
+            StringContent content = new StringContent(contentJson, System.Text.Encoding.UTF8, "application/json");
+
+            await webClient.PostAsync(webClientAddress, content);
         }
     }
 }

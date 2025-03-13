@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="CounterStrikeSharp.API" Version="1.0.305" />
-    <PackageReference Include="Discord.Net.Webhook" Version="3.17.2" />
   </ItemGroup>
 
 </Project>

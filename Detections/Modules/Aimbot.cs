@@ -175,7 +175,7 @@ namespace TBAntiCheat.Detections.Modules
             int maxDetections = config.Config.MaxDetectionsBeforeAction;
 
             data.detections++;
-            Globals.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections) | weapon: {player.GetWeapon().DesignerName}");
+            Globals.Log($"[TBAC] {player.Controller.PlayerName}: Suspicious aimbot -> {angleDiff} degrees ({data.detections}/{maxDetections} detections) | weapon: {player.GetWeapon()?.DesignerName ?? "Invalid Weapon"}");
 
             if (data.detections < maxDetections)
             {

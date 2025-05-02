@@ -11,6 +11,8 @@ Anticheat plugin for Counter-Strike 2 based on [CounterStrikeSharp](https://gith
 - [x] Rapid-Fire
 - [x] Untrusted Angles
 - [ ] Bunnyhop (WIP)
+- [ ] Triggerbot
+- [ ] R8 Autocook
 
 ### Integration
 - [x] Discord Webhooks

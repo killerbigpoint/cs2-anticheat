@@ -57,7 +57,7 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
-            Globals.Log($"[TBAC] Bot activated -> {controller.Slot} | {controller.PlayerName}");
+            //Globals.Log($"[TBAC] Bot activated -> {controller.Slot} | {controller.PlayerName}");
             OnPlayerJoined(controller);
 
             return HookResult.Continue;
@@ -192,7 +192,7 @@ namespace TBAntiCheat.Handlers
             Globals.Players[playerIndex] = player;
             BaseCaller.OnPlayerJoin(player);
 
-            Globals.Log($"[TBAC] Player joined -> {playerIndex} | {controller.PlayerName}");
+            //Globals.Log($"[TBAC] Player joined -> {playerIndex} | {controller.PlayerName}");
         }
 
         private static void OnPlayerLeft(CCSPlayerController? controller)
@@ -220,7 +220,7 @@ namespace TBAntiCheat.Handlers
             BaseCaller.OnPlayerLeave(player);
             Globals.Players[playerIndex] = null!;
 
-            Globals.Log($"[TBAC] Player left -> {playerIndex} | {controller.PlayerName}");
+            //Globals.Log($"[TBAC] Player left -> {playerIndex} | {controller.PlayerName}");
         }
     }
 }

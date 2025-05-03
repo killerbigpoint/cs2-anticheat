@@ -24,6 +24,16 @@ namespace TBAntiCheat.Detections.Modules
         internal override ActionType ActionType => config.Config.DetectionAction;
         internal override bool AlertDiscord => config.Config.AlertDiscord;
 
+        //NOTE: We're adding 0.1 extra here due how floating point numbers work in computers. 180f could theoretically still be 180.0002, etc.
+        private const float pitchMin = -89.1f;
+        private const float pitchMax = 89.1f;
+
+        private const float yawMin = -180.1f;
+        private const float yawMax = 180.1f;
+
+        private const float rollMin = -50.1f;
+        private const float rollMax = 50.1f;
+
         private readonly BaseConfig<UntrustedAnglesSaveData> config;
 
         internal UntrustedAngles() : base()
@@ -53,21 +63,21 @@ namespace TBAntiCheat.Detections.Modules
             float yaw = eyeAngles.Y;
             float roll = eyeAngles.Z;
 
-            if (pitch < -89f || pitch > 89f)
+            if (pitch < pitchMin || pitch > pitchMax)
             {
                 string reason = $"Untrusted EyeAngles Pitch -> {pitch}";
                 OnPlayerDetected(player, reason);
 
                 return;
             }
-            else if (yaw < -180f || yaw > 180f)
+            else if (yaw < yawMin || yaw > yawMax)
             {
                 string reason = $"Untrusted EyeAngles Yaw -> {yaw}";
                 OnPlayerDetected(player, reason);
 
                 return;
             }
-            else if (roll < -50f || roll > 50f)
+            else if (roll < rollMin || roll > rollMax)
             {
                 string reason = $"Untrusted EyeAngles Roll -> {roll}";
                 OnPlayerDetected(player, reason);

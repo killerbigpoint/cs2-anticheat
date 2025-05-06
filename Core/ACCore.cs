@@ -8,7 +8,7 @@ namespace TBAntiCheat.Core
     public class ACCore : BasePlugin
     {
         public override string ModuleName => "TB Anti-Cheat";
-        public override string ModuleVersion => "0.4.0";
+        public override string ModuleVersion => "0.4.1";
         public override string ModuleAuthor => "Killer_bigpoint";
         public override string ModuleDescription => "Anti-Cheat for CS2";
 

@@ -1,6 +1,6 @@
 ﻿using CounterStrikeSharp.API.ValveConstants.Protobuf;
 using TBAntiCheat.Detections;
-using System.Text.Json;
+using TBAntiCheat.Integration;
 
 namespace TBAntiCheat.Core
 {
@@ -12,23 +12,13 @@ namespace TBAntiCheat.Core
         internal string reason;
     }
 
-    public class WebhookData
-    {
-        public string username { get; set; } = string.Empty;
-        public string content { get; set; } = string.Empty;
-    }
-
     internal static class DetectionHandler
     {
-        private static HttpClient webClient = null!;
-        private static string webClientAddress = string.Empty;
-        private static WebhookData webClientData = null!;
-
         internal static void OnPlayerDetected(DetectionMetadata metadata)
         {
             if (metadata.module.AlertDiscord == true)
             {
-                SendWebhook(metadata);
+                NotifyDiscord(metadata);
             }
 
             switch (metadata.module.ActionType)
@@ -62,27 +52,9 @@ namespace TBAntiCheat.Core
             }
         }
 
-        internal static async void SendWebhook(DetectionMetadata metadata)
+        private static void NotifyDiscord(DetectionMetadata metadata)
         {
-            if (webClient == null)
-            {
-                ulong id = GeneralConfig.GetGeneralConfig().Config.DiscordWebhookID;
-                string token = GeneralConfig.GetGeneralConfig().Config.DiscordWebhookToken;
-
-                if (id == 0 || string.IsNullOrEmpty(token) == true)
-                {
-                    Globals.Log("[TBAC] Can't send webhook message when 'id' or 'token' is not set!");
-                    return;
-                }
-
-                webClient = new HttpClient();
-                webClientAddress = $"https://discordapp.com/api/webhooks/{id}/{token}";
-
-                webClientData = new WebhookData();
-                webClientData.username = "TB Anti-Cheat";
-            }
-
-            webClientData.content = $"**----- CHEATER DETECTED -----**\n```" +
+            string content = $"**----- CHEATER DETECTED -----**\n```" +
                 $"Detection: {metadata.module.Name}\n" +
                 $"Weapon: {metadata.player.GetWeapon().DesignerName}\n" +
                 $"Info: {metadata.reason}\n\n" +
@@ -91,10 +63,7 @@ namespace TBAntiCheat.Core
                 $"Time: {metadata.time}" +
                 $"```";
 
-            string contentJson = JsonSerializer.Serialize(webClientData);
-            StringContent content = new StringContent(contentJson, System.Text.Encoding.UTF8, "application/json");
-
-            await webClient.PostAsync(webClientAddress, content);
+            DiscordIntegration.SendWebhook(content);
         }
     }
 }

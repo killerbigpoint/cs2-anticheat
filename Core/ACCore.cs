@@ -1,6 +1,7 @@
 ﻿using CounterStrikeSharp.API.Core.Attributes;
 using CounterStrikeSharp.API.Core;
 using TBAntiCheat.Handlers;
+using TBAntiCheat.Integration;
 
 namespace TBAntiCheat.Core
 {
@@ -31,6 +32,8 @@ namespace TBAntiCheat.Core
             UserMessagesHandler.Initialize();
 
             GeneralConfig.Initialize();
+            DiscordIntegration.InitializeWebhook();
+            DiscordIntegration.SendWebhook("Server Started!");
 
             Globals.Log($"[TBAC] Loaded (v{ModuleVersion})");
         }

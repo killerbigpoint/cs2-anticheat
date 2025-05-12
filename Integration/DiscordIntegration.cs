@@ -7,8 +7,10 @@ namespace TBAntiCheat.Integration
     {
         private class WebhookData
         {
-            public string Username { get; set; } = string.Empty;
-            public string Content { get; set; } = string.Empty;
+#pragma warning disable IDE1006 // Naming Styles
+            public string username { get; set; } = string.Empty;
+            public string content { get; set; } = string.Empty;
+#pragma warning restore IDE1006 // Naming Styles
         }
 
         private static HttpClient webClient = null!;
@@ -30,7 +32,7 @@ namespace TBAntiCheat.Integration
             webClientAddress = $"https://discordapp.com/api/webhooks/{id}/{token}";
 
             webClientData = new WebhookData();
-            webClientData.Username = "TB Anti-Cheat";
+            webClientData.username = "TB Anti-Cheat";
 
             return true;
         }
@@ -48,14 +50,25 @@ namespace TBAntiCheat.Integration
                 return false;
             }
 
-            webClientData.Content = msg;
+            webClientData.content = msg;
 
             string contentJson = JsonSerializer.Serialize(webClientData);
             StringContent content = new StringContent(contentJson, System.Text.Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await webClient.PostAsync(webClientAddress, content);
 
-            Globals.Log($"Message -> {response}");
+            if (response.StatusCode == System.Net.HttpStatusCode.OK ||
+                response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                Globals.Log($"Message: {response}");
+            }
+            else
+            {
+                Globals.Log($"----- Discord Error! -----");
+                Globals.Log($"Message: {response}");
+                Globals.Log($"StackTrace: {Environment.StackTrace}");
+            }
+
             return true;
         }
     }

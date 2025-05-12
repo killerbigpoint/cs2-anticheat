@@ -29,7 +29,7 @@ namespace TBAntiCheat.Core
             EventListeners.Initialize(this);
             EventHandlers.Initialize(this, hotReload);
 
-            UserMessagesHandler.Initialize();
+            UserMessagesHandler.Initialize(this);
 
             GeneralConfig.Initialize();
             DiscordIntegration.InitializeWebhook();

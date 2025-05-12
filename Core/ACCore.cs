@@ -5,7 +5,7 @@ using TBAntiCheat.Integration;
 
 namespace TBAntiCheat.Core
 {
-    [MinimumApiVersion(264)]
+    [MinimumApiVersion(318)]
     public class ACCore : BasePlugin
     {
         public override string ModuleName => "TB Anti-Cheat";

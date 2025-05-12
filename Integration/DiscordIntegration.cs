@@ -57,12 +57,8 @@ namespace TBAntiCheat.Integration
 
             HttpResponseMessage response = await webClient.PostAsync(webClientAddress, content);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK ||
-                response.StatusCode == System.Net.HttpStatusCode.NoContent)
-            {
-                Globals.Log($"Message: {response}");
-            }
-            else
+            if (response.StatusCode != System.Net.HttpStatusCode.OK &&
+                response.StatusCode != System.Net.HttpStatusCode.NoContent)
             {
                 Globals.Log($"----- Discord Error! -----");
                 Globals.Log($"Message: {response}");

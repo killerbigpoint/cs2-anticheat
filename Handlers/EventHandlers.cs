@@ -53,7 +53,14 @@ namespace TBAntiCheat.Handlers
                 return HookResult.Continue;
             }
 
+            // Normal players are already getting handled correctly. No need to do that here
             if (controller.IsBot == false)
+            {
+                return HookResult.Continue;
+            }
+
+            // Skip out on SourceTV since we don't want to track a "player" like that
+            if (controller.IsHLTV == true)
             {
                 return HookResult.Continue;
             }

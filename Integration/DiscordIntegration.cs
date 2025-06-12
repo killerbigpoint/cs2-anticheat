@@ -39,7 +39,11 @@ namespace TBAntiCheat.Integration
 
         internal static async void SendWebhook(string msg)
         {
-            await SendWebhookAsync(msg);
+            bool result = await SendWebhookAsync(msg);
+            if (result == false)
+            {
+                Globals.Log("[TBAC] Sending webhook failed");
+            }
         }
 
         internal static async Task<bool> SendWebhookAsync(string msg)
@@ -52,10 +56,30 @@ namespace TBAntiCheat.Integration
 
             webClientData.content = msg;
 
-            string contentJson = JsonSerializer.Serialize(webClientData);
-            StringContent content = new StringContent(contentJson, System.Text.Encoding.UTF8, "application/json");
+            // Serialize the data we need for the webhook
+            string contentJson;
+            try
+            {
+                contentJson = JsonSerializer.Serialize(webClientData);
+            }
+            catch (Exception e)
+            {
+                Globals.Log($"[TBAC] Unable to send Webhook (Serialize Exception | {e.Message})");
+                return false;
+            }
 
-            HttpResponseMessage response = await webClient.PostAsync(webClientAddress, content);
+            // Try sending the response
+            HttpResponseMessage response;
+            try
+            {
+                StringContent content = new StringContent(contentJson, System.Text.Encoding.UTF8, "application/json");
+                response = await webClient.PostAsync(webClientAddress, content);
+            }
+            catch (Exception e)
+            {
+                Globals.Log($"[TBAC] Unable to send Webhook (Request Exception | {e.Message})");
+                return false;
+            }
 
             if (response.StatusCode != System.Net.HttpStatusCode.OK &&
                 response.StatusCode != System.Net.HttpStatusCode.NoContent)

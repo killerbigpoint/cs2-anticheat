@@ -18,7 +18,6 @@ namespace TBAntiCheat.Handlers
             plugin.RegisterEventHandler<EventPlayerDeath>(OnPlayerDeath);
 
             plugin.RegisterEventHandler<EventWeaponFire>(OnWeaponFire);
-            plugin.RegisterEventHandler<EventBulletDamage>(OnBulletDamage);
 
             plugin.RegisterEventHandler<EventRoundStart>(OnRoundStart);
             plugin.RegisterEventHandler<EventRoundEnd>(OnRoundEnd);
@@ -152,39 +151,6 @@ namespace TBAntiCheat.Handlers
 
             PlayerData shooter = Globals.Players[controller.Slot];
             BaseCaller.OnPlayerShoot(shooter);
-
-            return HookResult.Continue;
-        }
-
-        private static HookResult OnBulletDamage(EventBulletDamage damageEvent, GameEventInfo _)
-        {
-            Server.PrintToChatAll($"Bruh 1");
-
-            CCSPlayerController? victimController = damageEvent.Victim;
-            CCSPlayerController? shooterController = damageEvent.Attacker;
-
-            if (victimController == null || victimController.IsValid == false ||
-                shooterController == null || shooterController.IsValid == false)
-            {
-                Server.PrintToChatAll($"Bruh 2");
-                return HookResult.Continue;
-            }
-
-            PlayerData victim = Globals.Players[victimController.Slot];
-            PlayerData shooter = Globals.Players[shooterController.Slot];
-
-            if (victim == null || shooter == null)
-            {
-                Server.PrintToChatAll($"Bruh 3");
-                return HookResult.Continue;
-            }
-
-            System.Numerics.Vector3 eye = new System.Numerics.Vector3(shooter.Pawn.EyeAngles.X, shooter.Pawn.EyeAngles.Y, shooter.Pawn.EyeAngles.Z);
-            System.Numerics.Vector3 shot = new System.Numerics.Vector3(damageEvent.ShootAngX, damageEvent.ShootAngY, damageEvent.ShootAngZ);
-
-            Server.PrintToChatAll($"-------------------");
-            Server.PrintToChatAll($"EyeE: {eye}");
-            Server.PrintToChatAll($"Shot: {shot}");
 
             return HookResult.Continue;
         }

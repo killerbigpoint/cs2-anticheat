@@ -11,7 +11,7 @@ namespace TBAntiCheat.Handlers
         {
             Globals.Log($"[TBAC] UserMessagesHandler Initialized");
 
-            plugin.HookUserMessage(452, CMsgTEFireBullets, HookMode.Pre);
+            //plugin.HookUserMessage(452, CMsgTEFireBullets, HookMode.Pre);
         }
 
         private static HookResult CMsgTEFireBullets(UserMessage msg)

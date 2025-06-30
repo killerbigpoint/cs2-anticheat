@@ -49,6 +49,7 @@ namespace TBAntiCheat.Core
             }
 
             config.Config.Bans.Add(metadata);
+            config.Save();
         }
 
         internal static bool IsPlayerBanned(PlayerData player)

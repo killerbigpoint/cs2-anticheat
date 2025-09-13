@@ -10,6 +10,7 @@ Anticheat plugin for Counter-Strike 2 based on [CounterStrikeSharp](https://gith
 - [x] Aimbot Detection
 - [x] Rapid-Fire
 - [x] Untrusted Angles
+- [ ] Event Listening (WIP)
 - [ ] Bunnyhop (WIP)
 - [ ] Triggerbot
 - [ ] R8 Autocook

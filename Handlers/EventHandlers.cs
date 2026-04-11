@@ -1,4 +1,4 @@
-﻿using CounterStrikeSharp.API;
+using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using TBAntiCheat.Core;
 using TBAntiCheat.Detections;
@@ -176,6 +176,17 @@ namespace TBAntiCheat.Handlers
             if (controller == null || controller.IsValid == false)
             {
                 Globals.Log($"[TBAC] WARNING: Controller is invalid when player joined");
+                return;
+            }
+
+            // Check if player is already banned
+            if (controller.AuthorizedSteamID != null && BanHandler.IsPlayerBanned(controller.AuthorizedSteamID) == true)
+            {
+                string reason = BanHandler.GetBanReason(controller.AuthorizedSteamID);
+                Globals.Log($"[TBAC] Banned player {controller.PlayerName} tried to join. Kicking... (Reason: {reason})");
+                
+                // Kick the player
+                controller.Disconnect(CounterStrikeSharp.API.ValveConstants.Protobuf.NetworkDisconnectionReason.NETWORK_DISCONNECT_STEAM_BANNED);
                 return;
             }
 

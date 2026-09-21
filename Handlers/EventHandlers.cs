@@ -34,7 +34,7 @@ namespace TBAntiCheat.Handlers
                         continue;
                     }
 
-                    if (controller.Connected != PlayerConnectedState.PlayerConnected)
+                    if (controller.Connected != PlayerConnectedState.Connected)
                     {
                         continue;
                     }

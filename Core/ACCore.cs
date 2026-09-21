@@ -5,11 +5,11 @@ using TBAntiCheat.Integration;
 
 namespace TBAntiCheat.Core
 {
-    [MinimumApiVersion(318)]
+    [MinimumApiVersion(374)]
     public class ACCore : BasePlugin
     {
         public override string ModuleName => "TB Anti-Cheat";
-        public override string ModuleVersion => "0.4.1";
+        public override string ModuleVersion => "0.4.2";
         public override string ModuleAuthor => "Killer_bigpoint";
         public override string ModuleDescription => "Anti-Cheat for CS2";
 

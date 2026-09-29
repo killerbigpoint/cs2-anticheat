@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API.Modules.Entities;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Entities;
 
 namespace TBAntiCheat.Core
 {
@@ -9,7 +10,7 @@ namespace TBAntiCheat.Core
 
     public class BanMetadata
     {
-        public required SteamID SteamID { get; set; }
+        public required ulong SteamID { get; set; }
         public required string Reason { get; set; }
         public required string LastKnownUsername { get; set; }
     }
@@ -25,7 +26,12 @@ namespace TBAntiCheat.Core
 
         internal static void BanPlayer(PlayerData player, string reason)
         {
-            SteamID? steamID = player.Controller.AuthorizedSteamID;
+            BanPlayer(player.Controller, reason);
+        }
+
+        internal static void BanPlayer(CCSPlayerController controller, string reason)
+        {
+            SteamID? steamID = controller.AuthorizedSteamID;
             if (steamID == null)
             {
                 return;
@@ -38,9 +44,9 @@ namespace TBAntiCheat.Core
 
             BanMetadata metadata = new BanMetadata()
             {
-                SteamID = steamID,
+                SteamID = steamID.SteamId64,
                 Reason = reason,
-                LastKnownUsername = player.Controller.PlayerName
+                LastKnownUsername = controller.PlayerName
             };
 
             if (config == null)
@@ -50,6 +56,27 @@ namespace TBAntiCheat.Core
 
             config.Config.Bans.Add(metadata);
             config.Save();
+        }
+
+        internal static bool UnbanPlayer(string steamIdStr)
+        {
+            if (config == null)
+            {
+                return false;
+            }
+
+            // Remove player from the ban list by matching SteamID string or ulong
+            int removedCount = config.Config.Bans.RemoveAll(b => 
+                b.SteamID.ToString() == steamIdStr || 
+                steamIdStr.Contains(b.SteamID.ToString()));
+            
+            if (removedCount > 0)
+            {
+                config.Save();
+                return true;
+            }
+
+            return false;
         }
 
         internal static bool IsPlayerBanned(PlayerData player)
@@ -65,17 +92,18 @@ namespace TBAntiCheat.Core
 
         internal static bool IsPlayerBanned(SteamID steamID)
         {
-            if (config == null)
+            if (steamID == null || config == null)
             {
                 return false;
             }
 
+            ulong steamId64 = steamID.SteamId64;
             List<BanMetadata> banList = config.Config.Bans;
             int banListCount = banList.Count;
 
             for (int i = 0; i < banListCount; i++)
             {
-                if (banList[i].SteamID == steamID)
+                if (banList[i].SteamID == steamId64)
                 {
                     return true;
                 }
@@ -86,34 +114,39 @@ namespace TBAntiCheat.Core
 
         internal static string GetBanReason(PlayerData player)
         {
-            SteamID? steamID = player.Controller.AuthorizedSteamID;
-            if (steamID == null)
-            {
-                return string.Empty;
-            }
+            return GetBanReason(player.Controller.AuthorizedSteamID!);
+        }
 
-            return GetBanReason(steamID);
+        internal static string GetBanReason(CCSPlayerController controller)
+        {
+            return GetBanReason(controller.AuthorizedSteamID!);
         }
 
         internal static string GetBanReason(SteamID steamID)
         {
-            if (config == null)
+            if (steamID == null || config == null)
             {
                 return string.Empty;
             }
 
+            ulong steamId64 = steamID.SteamId64;
             List<BanMetadata> banList = config.Config.Bans;
             int banListCount = banList.Count;
 
             for (int i = 0; i < banListCount; i++)
             {
-                if (banList[i].SteamID == steamID)
+                if (banList[i].SteamID == steamId64)
                 {
                     return banList[i].Reason;
                 }
             }
 
             return string.Empty;
+        }
+
+        internal static List<BanMetadata> GetBans()
+        {
+            return config?.Config.Bans ?? new List<BanMetadata>();
         }
     }
 }
